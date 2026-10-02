@@ -431,6 +431,147 @@ function removeGrim($str) {
 	);
 }
 
+function restoreJapaneseFurigana($str, $manifestPath) {
+	$data = json_decode(file_get_contents($manifestPath), true, 512, JSON_THROW_ON_ERROR);
+	$entries = [];
+	foreach ($data['entries'] as $entry) {
+		$id = $entry['dialogue'];
+		if (isset($entries[$id]) ||
+			preg_replace('/\{ruby:[^{}]*:([^{}]*)\}/u', '$1', $entry['after']) !== $entry['before']) {
+			err('Invalid Japanese furigana entry '.$id);
+		}
+		$entries[$id] = $entry;
+	}
+	$str = preg_replace_callback('/^(\*d(\d+)\n)(d2? [^\n]*)(?=\n)/m', function ($match) use (&$entries) {
+		$id = (int)$match[2];
+		if (!isset($entries[$id])) return $match[0];
+		$entry = $entries[$id];
+		if ($match[3] !== $entry['before']) err('Japanese dialogue changed; regenerate furigana for d'.$id);
+		unset($entries[$id]);
+		return $match[1].$entry['after'];
+	}, $str);
+	if ($str === null || $entries) err('Japanese furigana dialogue targets are missing');
+	return $str;
+}
+
+function hideJapaneseGrimoireButtons($str) {
+	// Only hide the Grimoire switch. Episode 8 Tips keeps its original
+	// destination; the Japanese menu aliases make that Grimoire page blank.
+	$str = preg_replace('/^\h*if %r_display = 1 && %scenario_Number != 8 _csp r_tips_lsp : lsp r_grim_lsp,.*$/m', '', $str, -1, $drawCount);
+	$str = preg_replace('/^\h*spbtn r_grim_lsp,r_grim_lsp\h*$/m', '', $str, -1, $buttonCount);
+	if ($drawCount != 1 || $buttonCount != 1) err('Unable to hide Japanese Grimoire switch');
+
+	return $str;
+}
+
+function stubJapaneseOmakeRoutes($str) {
+	// Only Omake 2 is restored in Japanese. Keep the Rondo button presentation,
+	// disable Chiru's hidden button, and never enter its untranslated hub.
+	$handler = "\tif %BtnRes = t_btn_start_lsp cell t_btn_start_lsp,1 : print 1 : btndef \"\" : goto *start_sub_menu";
+	$redirect = "\tif %BtnRes = t_btn_start_lsp && %omake = 1 cell t_btn_start_lsp,1 : print 1 : btndef \"\" : mov \$omake_return,\"\" : mov %scenario_Number,2 : goto *umi_start\n".$handler;
+	if (substr_count($str, $handler) != 1)
+		err('Unable to find the title Start/Omake button handler');
+	$str = str_replace($handler, $redirect, $str);
+
+	$entryHandlers =
+		"\tif %BtnRes = t_btn_omake_lsp && %omake_level > 1 mov %scenario_Number,5 mov %omake,1 : goto *umi_start\n".
+		"\tif %CHIRU_MODE = 0 && %BtnRes = t_btn_omake_lsp gosub *omake_sub_menu\n".
+		"\tif %CHIRU_MODE = 1 && %BtnRes = t_btn_omake_lsp mov %scenario_Number,5 mov %omake,1 : goto *umi_start";
+	$stubbedEntries =
+		"\tif %CHIRU_MODE = 0 && %BtnRes = t_btn_omake_lsp gosub *omake_sub_menu";
+	if (substr_count($str, $entryHandlers) != 1)
+		err('Unable to find the title Omake entry handlers');
+	$str = str_replace($entryHandlers, $stubbedEntries, $str);
+
+	$buttonHandlers =
+		"\tif %omake = 0 spbtn t_btn_omake_lsp,t_btn_omake_lsp\n".
+		"\tif %omake = 1 spbtn t_btn_omake_lsp,t_btn_omake_end_lsp";
+	$disabledInChiru =
+		"\tif %CHIRU_MODE = 0 && %UMINEKOEND >= 21 && %omake = 0 spbtn t_btn_omake_lsp,t_btn_omake_lsp\n".
+		"\tif %CHIRU_MODE = 0 && %UMINEKOEND >= 21 && %omake = 1 spbtn t_btn_omake_lsp,t_btn_omake_end_lsp";
+	if (substr_count($str, $buttonHandlers) != 1)
+		err('Unable to find the title Omake button registrations');
+	$str = str_replace($buttonHandlers, $disabledInChiru, $str);
+
+	$returnToHub = 'if %omake_level >= 2 mov $omake_return,"omake"';
+	if (substr_count($str, $returnToHub) != 1)
+		err('Unable to find the Omake hub return handler');
+	return str_replace($returnToHub."\n", '', $str);
+}
+
+function redirectJapaneseCacheSources($str, $scripting) {
+	$aliases = [];
+	for ($i = 1; $i <= 4; $i++)
+		$aliases['goa_memory'.$i.'_src'] = 'goa_memory'.$i.'.png';
+	for ($i = 1; $i <= 10; $i++)
+		$aliases['kakera_memory'.$i.'_src'] = 'kakera\\kakera_memory'.$i.'.png';
+
+	foreach ($aliases as $alias => $relativePath) {
+		$old = 'stralias '.$alias.',":c;graphics\\locale\\'.$relativePath.'"';
+		$new = 'stralias '.$alias.',":c;graphics\\locale_jp\\'.$relativePath.'"';
+		if (substr_count($str, $old) != 1)
+			err('Unable to find Japanese cache source alias '.$alias);
+		$asset = $scripting.'/graphics/locale_jp/'.str_replace('\\', '/', $relativePath);
+		if (!is_file($asset))
+			err('Missing Japanese cache source '.$asset);
+		$str = str_replace($old, $new, $str);
+	}
+	return $str;
+}
+
+function removeJapaneseSoftSubtitles($str) {
+	// Remove subtitle presence checks together with the branch consuming
+	// their result, so it cannot accidentally reuse an earlier %Free1 value.
+	$str = preg_replace(
+		'/^\h*fileexist %Free1,"video\\\\sub\\\\(?:both_eng|58_both_eng)\.ass"\h*\R\h*if %Free1==0 mov \$Free1,verify_updates : gosub \*verify_err : jumpf\h*\R/m',
+		'', $str, -1, $verification_count
+	);
+	if ($verification_count != 2) err('Unable to remove Japanese subtitle verification pairs');
+	$str = preg_replace(
+		'/^\*Sub_List\R.*?(?=^\*Me_List\R)/ms',
+		"*Sub_List\nmov \$track_id,\"\"\nreturn\n\n",
+		$str,
+		-1,
+		$sub_list_count
+	);
+	$str = preg_replace(
+		'/^\*settings_op_ed_song_subtitles\R.*?(?=^\*settings_full_window_auto\R)/ms',
+		'',
+		$str,
+		-1,
+		$settings_routine_count
+	);
+	$str = preg_replace(
+		'/^\t;Op\/Ed song subtitles button\R.*?^\t;end\R/ms',
+		'',
+		$str,
+		-1,
+		$settings_button_count
+	);
+	if (
+		$str === null
+		|| $sub_list_count != 1
+		|| $settings_routine_count != 1
+		|| $settings_button_count != 2
+	) {
+		err('Unable to remove Japanese soft-subtitle controls');
+	}
+
+	$str = preg_replace(
+		'/^.*(?:end_all00_subs|set_song_subtitles|settings_op_ed_song_subtitles|op_ed_song_subtitles).*\R?/mi',
+		'',
+		$str
+	);
+	$str = preg_replace('/^.*(?:(?:video|legacy)\\\\sub\\\\|\.ass").*\R?/mi', '', $str);
+	if (
+		$str === null
+		|| preg_match('/(?:video|legacy)\\\\sub\\\\|\.ass"|sub_get_/i', $str) === 1
+	) {
+		err('Japanese script still contains soft subtitles');
+	}
+	return $str;
+}
+
 
 function main($argc, $argv) {
 	if ($argc < 2) err(getUsage());
@@ -493,7 +634,7 @@ function main($argc, $argv) {
 					$tldir = $scripting.'/story/ep'.$i.'/en/';
 				$script .= inplaceLines($scripting.'/game/main/', $scripting.'/story/ep'.$i.'/jp/', $tldir, in_array($locale, REPLACE_GRIM_WITH_LOCALIZE));
 			}
-			$script .= inplaceLines($scripting.'/game/omake/', $scripting.'/story/omake/jp/',
+			$script .= inplaceLines($scripting.'/game/omake/', $scripting.'/story/omake/source/',
 				$scripting.'/story/omake/'.$locale.'/');
 
 			$footer = file_get_contents($scripting.'/script/umi_ftr.txt');
@@ -503,9 +644,24 @@ function main($argc, $argv) {
 				$footer = file_get_contents($scripting.'/script/cht/umi_ftr.txt');				
 			if ($locale == 'tr')
 				$footer = file_get_contents($scripting.'/script/tr/umi_ftr.txt');
+			if ($locale == 'jp') {
+				$footer = str_replace('graphics\\menu_en\\', 'graphics\\menu_jp\\', $footer);
+				$footer = str_replace('graphics\\locale_en\\', 'graphics\\locale_jp\\', $footer);
+				$footer = hideJapaneseGrimoireButtons($footer);
+				$footer = stubJapaneseOmakeRoutes($footer);
+				$japaneseEndCard = $scripting.'/graphics/locale_jp/end_4a.png';
+				if (!is_file($japaneseEndCard))
+					err('Missing Japanese asset '.$japaneseEndCard);
+				$footer = str_replace('24299420 mov $Free1,verify_updates', filesize($japaneseEndCard).' mov $Free1,verify_updates', $footer);
+			}
 			$script .= str_replace(CRLF, LF, $footer);
 
 			localiseScript($script, $scripting.'/script/'.$locale.'/');
+			if ($locale == 'jp') {
+				$script = redirectJapaneseCacheSources($script, $scripting);
+				$script = restoreJapaneseFurigana($script, $scripting.'/update-manager/jp-furigana.json');
+				$script = removeJapaneseSoftSubtitles($script);
+			}
 
 			file_put_contents($argv[2], $script);
 			break;
@@ -547,4 +703,5 @@ function main($argc, $argv) {
 	
 }
 
-main($argc, $argv);
+if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__)
+	main($argc, $argv);

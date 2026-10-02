@@ -27,6 +27,7 @@ jobs:
           LAST=$(<current/last)
           if [ "$LAST" == "" ]; then LAST=1; fi
           if [ -f current/last_en ]; then LAST_EN=$(<current/last_en); else LAST_EN="$LAST" ; fi
+          if [ -f current/last_jp ]; then LAST_JP=$(<current/last_jp); else LAST_JP="$LAST_EN" ; fi
           if [ -f current/last_cn ]; then LAST_CN=$(<current/last_cn); else LAST_CN="$LAST" ; fi
           if [ -f current/last_ru ]; then LAST_RU=$(<current/last_ru); else LAST_RU="$LAST" ; fi
           if [ -f current/last_pt ]; then LAST_PT=$(<current/last_pt); else LAST_PT="$LAST" ; fi
@@ -34,7 +35,20 @@ jobs:
           if [ -f current/last_tr ]; then LAST_TR=$(<current/last_tr); else LAST_TR="$LAST" ; fi
           if [ -f current/last_idn ]; then LAST_IDN=$(<current/last_idn); else LAST_IDN="$LAST" ; fi
           if [ -f current/last_vi ]; then LAST_VI=$(<current/last_vi); else LAST_VI="$LAST" ; fi
+          python3 update-manager/extract-jp-menu-text.py || exit 1
+          python3 update-manager/generate-jp-furigana.py || exit 1
+          php update-manager/generate-jp-menu.php || exit 1
+          git diff --exit-code -- update-manager/jp-menu-text.json update-manager/jp-furigana.json script/jp/menu.txt script/umi_ftr.txt || exit 1
+          php update-manager/verify-jp-assets.php || exit 1
+          python3 update-manager/verify-jp-chapters.py || exit 1
+          php update-manager/test-jp-grimoire.php || exit 1
           php update-manager/update-manager.php dscript "ciout/en.txt" . en ${BUILD} || exit 1
+          php update-manager/update-manager.php dscript "ciout/jp.txt" . jp ${BUILD} || exit 1
+          python3 update-manager/verify-jp-sprite-slots.py ciout/jp.txt || exit 1
+          python3 update-manager/verify-jp-furigana.py ciout/jp.txt || exit 1
+          if grep -Eq 'graphics\\(menu_en|locale_en)' ciout/jp.txt; then exit 1; fi
+          if grep -Eqi 'Head Translator|Translation / Editing|Translation Basis|Translation \(Russian\)|The Witch Hunt' ciout/jp.txt; then exit 1; fi
+          if grep -Eqi 'video\\sub|legacy\\sub|\.ass"|sub_get_|set_song_subtitles|end_all00_subs|op_ed_song_subtitles' ciout/jp.txt; then exit 1; fi
           php update-manager/update-manager.php dscript "ciout/ru.txt" . ru ${BUILD} || exit 1
           php update-manager/update-manager.php dscript "ciout/pt.txt" . pt ${BUILD} || exit 1
           php update-manager/update-manager.php dscript "ciout/cn.txt" . cn ${BUILD} || exit 1
@@ -53,7 +67,7 @@ jobs:
           cp misc/it.cfg ciout
           cp misc/tr.cfg ciout
           cd ciout
-          zip -qry umineko-main-scripts_r${BUILD}_dev.zip ru.txt en.txt chiru.file game.hash default.cfg || exit 1
+          zip -qry umineko-main-scripts_r${BUILD}_dev.zip ru.txt en.txt jp.txt chiru.file game.hash default.cfg || exit 1
           zip -qry umineko-pt-scripts_r${BUILD}_dev.zip pt.txt pt.cfg || exit 1
           zip -qry umineko-cn-scripts_r${BUILD}_dev.zip cn.txt cn.cfg || exit 1
           zip -qry umineko-wh-scripts_r${BUILD}_dev.zip wh.txt || exit 1
@@ -64,6 +78,7 @@ jobs:
           zip -qry umineko-vi-scripts_r${BUILD}_dev.zip vi.txt vi.cfg || exit 1
           cd ..
           php update-manager/update-manager.php script ciout/en.txt "ciout/en.file" "$LAST_EN" || exit 1
+          php update-manager/update-manager.php script ciout/jp.txt "ciout/jp.file" "$LAST_JP" || exit 1
           php update-manager/update-manager.php script ciout/ru.txt "ciout/ru.file" "$LAST_RU" || exit 1
           php update-manager/update-manager.php script ciout/pt.txt "ciout/pt.file" "$LAST_PT" || exit 1
           php update-manager/update-manager.php script ciout/cn.txt "ciout/cn.file" "$LAST_CN" || exit 1
@@ -74,7 +89,7 @@ jobs:
           php update-manager/update-manager.php script ciout/idn.txt "ciout/idn.file" "$LAST_IDN" || exit 1
           php update-manager/update-manager.php script ciout/vi.txt "ciout/vi.file" "$LAST_VI" || exit 1
           cd ciout
-          zip -qry umineko-main-scripts_r${BUILD}.zip ru.file en.file chiru.file game.hash default.cfg || exit 1
+          zip -qry umineko-main-scripts_r${BUILD}.zip ru.file en.file jp.file chiru.file game.hash default.cfg || exit 1
           zip -qry umineko-pt-scripts_r${BUILD}.zip pt.file pt.cfg || exit 1
           zip -qry umineko-cn-scripts_r${BUILD}.zip cn.file cn.cfg || exit 1
           zip -qry umineko-wh-scripts_r${BUILD}.zip wh.file || exit 1

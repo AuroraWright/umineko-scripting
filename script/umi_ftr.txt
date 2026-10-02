@@ -386,7 +386,7 @@ if $name_chapter_save == "4_tea" gosub *teatime_ep4_end
 if $name_chapter_save == "1_ura" gosub *teatime_ep1b_end
 if $name_chapter_save == "2_ura" gosub *teatime_ep2b_end
 if $name_chapter_save == "3_ura" gosub *teatime_ep3b_end
-if $name_chapter_save == "4_ura" gosub *teatime_ep4b_end : gosub *credits_ep4
+if $name_chapter_save == "4_ura" gosub *teatime_ep4b_end : mov $lbg_name,"portrait_ep4" : gosub *open_cg : gosub *credits_ep4
 
 ~
 
@@ -22797,6 +22797,9 @@ if $lbg_name == "c_e0903_b" mov ?cg_list[0][53],1 : return
 if $lbg_name == "portrait1" mov ?cg_list[0][54],1 : return
 if $lbg_name == "portrait3" mov ?cg_list[0][55],1 : return
 if $lbg_name == "portrait4" mov ?cg_list[0][56],1 : return
+if $lbg_name == "portrait_ep4" mov ?cg_list[0][57],1 : return
+if $lbg_name == "package01" mov ?cg_list[0][58],1 : return
+if $lbg_name == "package02" mov ?cg_list[0][59],1 : return
 
 ~
 
@@ -25701,6 +25704,7 @@ return
 	;ep
 	mov ?bgm_list[89],1
 	mov ?bgm_list[85],1
+	mov ?bgm_list[94],1
 	mov ?bgm_list[91],1
 	mov ?bgm_list[90],1
 	mov ?bgm_list[92],1
@@ -25824,12 +25828,15 @@ return
 	mov ?bgm_list[38],1
 	mov ?bgm_list[39],1
 	mov ?bgm_list[1010],1
+	mov ?bgm_list[1011],1
 	mov ?bgm_list[1012],1
 
 return
 
 
 *load_cgs_8
+	mov $lbg_name,"package03" : gosub *load_cg
+	mov $lbg_name,"package04" : gosub *load_cg
 	mov $lbg_name,"ep801" : gosub *load_cg
 	mov $lbg_name,"ep802" : gosub *load_cg
 	mov $lbg_name,"c_e0102_a" : gosub *load_cg
@@ -25914,6 +25921,9 @@ return
 	mov $lbg_name,"bac_ga2n" : gosub *load_cg
 
 *load_cgs_4
+	mov $lbg_name,"portrait_ep4" : gosub *load_cg
+	mov $lbg_name,"package01" : gosub *load_cg
+	mov $lbg_name,"package02" : gosub *load_cg
 	;ura
 	mov $lbg_name,"e0902" : gosub *load_cg
 
@@ -28854,6 +28864,7 @@ return
 	if $Free3 == "tr" mov $Free3,"Türkçe"
 	if $Free3 == "idn" mov $Free3,"Indonesia"
 	if $Free3 == "vi" mov $Free3,"Tiếng Việt"
+	if $Free3 == "jp" mov $Free3,"日本語"
 	lsp 268,":s;#FFFFFF`{p:8:{w:350:}{a:c:}{fit}" + $Free3 + "}",1280,226
 	lsp 380,":a/2,0,3;graphics\menu_en\config\config_left.png",1210,226
 	lsp 381,":a/2,0,3;graphics\menu_en\config\config_right.png",1640,226
@@ -32887,6 +32898,7 @@ if localisation == "cn" mov %game_language,3 : mov $Free3,"Chinese Simp."
 if localisation == "cht" mov %game_language,4 : mov $Free3,"Chinese Trad."
 if localisation == "it" mov %game_language,5 : mov $Free3,"Italiano"
 if localisation == "tr" mov %game_language,6 : mov $Free3,"Witch Love"
+if localisation == "jp" mov %game_language,7 : mov $Free3,"日本語"
 
 getscriptnum %Free1
 for %Free2 = 0 to %Free1-1
@@ -32961,6 +32973,14 @@ if %game_language != 6 jumpf
 	lsp 302,":s;#FFFFFF`{p:8:Pencere boyutu}",135,%y+100
 	lsp 303,":s;#FFFFFF`{p:8:Pencere modu}",135,%y+200
 	lsp 304,":s;#FFFFFF`{p:8:Oynanış}",135,%y+300
+~
+
+if %game_language != 7 jumpf
+	lsp 300,":s;#FFFFFF`{p:10:——————}{p:9:{a:c: 初期ゲーム設定 }{p:10:——————}}",135,%y-100
+	lsp 301,":s;#FFFFFF`{p:8:ゲーム言語}",135,%y
+	lsp 302,":s;#FFFFFF`{p:8:ウィンドウサイズ}",135,%y+100
+	lsp 303,":s;#FFFFFF`{p:8:表示モード}",135,%y+200
+	lsp 304,":s;#FFFFFF`{p:8:操作方法}",135,%y+300
 ~
 
 *first_setting2
@@ -33113,6 +33133,7 @@ return
 	if $Free3 == "cn" mov $Free3,"Chinese Simp." mov %game_language,3
 	if $Free3 == "cht" mov $Free3,"Chinese Trad." mov %game_language,4
 	if $Free3 == "it" mov $Free3,"Italiano" mov %game_language,5
+	if $Free3 == "jp" mov $Free3,"日本語" mov %game_language,7
 	lsp 273,":s;#FFFFFF`{p:8:{w:350:}{a:c:}{fit}" + $Free3 + "}",1280,%y
 
 	lsp 269,":a/2,0,3;graphics\menu_en\config\config_left.png",1210,%y
@@ -33176,6 +33197,14 @@ if %game_language != 6 jumpf
 	notif  %full_window_auto = 0 lsp 281,":s;#C7C7C7#FFFFFF`{p:8:Otomatik}",1559,%y+200
 	if %full_window_auto = 0 lsp 281,":s;#FFFFFF`{p:8:Otomatik}",1559,%y+200
 ~
+if %game_language != 7 jumpf
+	notif  %full_window_auto = 1 lsp 279,":s;#C7C7C7#FFFFFF`{p:8:{w:300:}{a:c:}{fit}ウィンドウ}",850,%y+200
+	if %full_window_auto = 1 lsp 279,":s;#FFFFFF`{p:8:{w:300:}{a:c:}{fit}ウィンドウ}",850,%y+200
+	notif  %full_window_auto = 2 lsp 280,":s;#C7C7C7#FFFFFF`{p:8:{w:360:}{a:c:}{fit}フルスクリーン}",1160,%y+200
+	if %full_window_auto = 2 lsp 280,":s;#FFFFFF`{p:8:{w:360:}{a:c:}{fit}フルスクリーン}",1160,%y+200
+	notif  %full_window_auto = 0 lsp 281,":s;#C7C7C7#FFFFFF`{p:8:{w:220:}{a:c:}{fit}自動}",1550,%y+200
+	if %full_window_auto = 0 lsp 281,":s;#FFFFFF`{p:8:{w:220:}{a:c:}{fit}自動}",1550,%y+200
+~
 return
 
 
@@ -33223,6 +33252,12 @@ if %game_language != 6 jumpf
 	notif %interface_kb_dual = 1 lsp 271,":s;#C7C7C7#FFFFFF`{p:8:DualShock}",1377,%y+300
 	if %interface_kb_dual = 1 lsp 271,":s;#FFFFFF`{p:8:DualShock}",1377,%y+300
 ~
+if %game_language != 7 jumpf
+	notif %interface_kb_dual = 0 lsp 270,":s;#C7C7C7#FFFFFF`{p:8:{w:430:}{a:c:}{fit}キーボード＋マウス}",900,%y+300
+	if %interface_kb_dual = 0 lsp 270,":s;#FFFFFF`{p:8:{w:430:}{a:c:}{fit}キーボード＋マウス}",900,%y+300 : vsp 100,0
+	notif %interface_kb_dual = 1 lsp 271,":s;#C7C7C7#FFFFFF`{p:8:{w:300:}{a:c:}{fit}DualShock}",1380,%y+300
+	if %interface_kb_dual = 1 lsp 271,":s;#FFFFFF`{p:8:{w:300:}{a:c:}{fit}DualShock}",1380,%y+300
+~
 return
 
 
@@ -33240,6 +33275,7 @@ return
 	if %game_language = 4 lsp 299,":s;#FFFFFF`{p:8:{w:350:}{a:c:}{fit}自定義}",1280,%y+100
 	if %game_language = 5 lsp 299,":s;#FFFFFF`{p:8:{w:350:}{a:c:}{fit}Personalizzata}",1280,%y+100
 	if %game_language = 6 lsp 299,":s;#FFFFFF`{p:8:{w:350:}{a:c:}{fit}Özel}",1280,%y+100
+	if %game_language = 7 lsp 299,":s;#FFFFFF`{p:8:{w:350:}{a:c:}{fit}カスタム}",1280,%y+100
 	~
 	lsp 297,":a/2,0,3;graphics\menu_en\config\config_left.png",1210,%y+112
 	lsp 298,":a/2,0,3;graphics\menu_en\config\config_right.png",1640,%y+112
@@ -33266,6 +33302,12 @@ if %game_language != 5 jumpf
 ~
 if %game_language != 6 jumpf
 	lsp 272,":s;#C7C7C7#FFFFFF`{p:8:Onayla}",800,%y+500
+~
+if %game_language != 7 jumpf
+	;Align with the Japanese heading's visual center, measured in screenshot.png.
+	lsp 272,":s;#C7C7C7#FFFFFF`{p:8:適用}",927,%y+500
+	getspsize 272,%Free7,%Free8
+	msp 272,-%Free7/2,0
 ~
 return
 

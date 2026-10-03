@@ -359,6 +359,9 @@ foreach (['ep8_9_page_1_5_t', 'ep8_9_page_2_5_t', 'ep8_9_page_2_6_t', 'ep8_9_pag
 	}
 }
 $bernSpacingChecks = [
+	// The PS3 capture presents the interior-lock clarification as its own red
+	// statement rather than a continuation of the preceding one.
+	'マスターキーでしか行えない。}{n}{n}{p:1:もちろん、部屋の内側からは',
 	// Chapter view: blank line between speaker/statement blocks, but the
 	// statement remains directly below its character name.
 	'」{n}{n}熊沢{n}「',

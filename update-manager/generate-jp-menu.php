@@ -622,6 +622,9 @@ foreach ($statements as $name => $ranges) {
 	foreach ($ranges as $range) {
 		$statement = stripDialogueQuotes(storyText($story, $range[0], $range[1] ?? null));
 		$statement = preg_replace('/^…+/u', '', $statement);
+		if ($name === 'ep8_9_page_1_5_t' && $range[0] === 49) {
+			$statement = str_replace('。もちろん、', '。}{n}{n}{p:1:もちろん、', $statement);
+		}
 		$closingTags = '';
 		while (str_ends_with($statement, '}')) {
 			$statement = substr($statement, 0, -1);

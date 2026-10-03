@@ -24,8 +24,8 @@ numalias text_name_pad_t,25
 numalias text_name_pad_r,100
 numalias text_name_pad_b,-60
 numalias text_name_pad_l,87
-numalias criminal_header_y,150
-numalias criminal_button_y,870
+numalias criminal_header_y,160
+numalias criminal_button_y,883
 
 ;--Textboxes-end--
 

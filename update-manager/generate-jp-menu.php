@@ -56,7 +56,7 @@ function storySection(array $story, string $heading, array $ranges): string
 	foreach ($ranges as $range) {
 		$quotes[] = storyText($story, $range[0], $range[1] ?? null);
 	}
-	return '■' . $heading . '{n}' . implode('{n}', $quotes);
+	return '■' . $heading . '{n}' . implode('{n}{n}', $quotes);
 }
 
 function stripDialogueQuotes(string $text): string
@@ -494,33 +494,49 @@ foreach ($englishPuzzleAliases as $name) {
 		$aliases[$name] = menuAlias($englishMenu, $name, $englishMenuPath);
 	}
 }
+$aliases['ep8_9_hint_unknown'] = '{p:36:????????????}';
 
 // Preserve the wording used in the PS3 scenario's displayed rule list. The
 // final narrator rule is stated immediately after that list in the same scene.
-$aliases['ep8_9_rules'] = ':s;#FFFFFF`{p:32:{p:0:●} 犯人の定義とは、殺人者のことである。{n}'
-	. '{p:0:●} 犯人はウソをつく可能性がある。{n}{p:0:●} 犯人は殺人以前にもウソをつく可能性がある。{n}'
-	. '{p:0:●} 犯人でない人物は、真実のみを語る。{n}{p:0:●} 犯人でない人物は、犯人に協力しない。{n}'
-	. '{p:0:●} 犯人は全ての殺人を、自らの手で直接行なう。{n}{p:0:●} 犯人が死ぬことはない。{n}'
-	. '{p:0:●} 犯人は登場人物の中にいる。{n}{p:0:●} 紫の発言は、赤き真実と同じ価値がある。{n}'
-	. 'ただし、犯人のみ、紫の発言でウソがつける。{n}{p:0:●} セリフでないト書き部分に、ウソは存在しない。}';
+// Sprite text ignores the preset's requested line advance, so short invisible
+// spacer lines reproduce the PS3 list's vertical distribution reliably.
+$ruleLines = [
+	'●犯人の定義とは、殺人者のことである。',
+	'●犯人はウソをつく可能性がある。',
+	'●犯人は殺人以前にもウソをつく可能性がある。',
+	'●犯人でない人物は、真実のみを語る。',
+	'●犯人でない人物は、犯人に協力しない。',
+	'●犯人は全ての殺人を、自らの手で直接行う。',
+	'●犯人が死ぬことはない。',
+	'●犯人は登場人物の中にいる。',
+	'●紫の発言は、赤き真実と同じ価値がある。',
+	'　ただし、犯人のみ、紫の発言でウソがつける。',
+	'●セリフでないト書き部分に、ウソは存在しない。',
+];
+$aliases['ep8_9_rules'] = ':s;#FFFFFF`{p:34:' . implode('{n}{p:35:　}{n}', $ruleLines) . '}';
 // Exact choice text embedded in the five hint switches in the PS3 Chiru SNR.
 $hintTexts = [
 	'信用できる紫発言を探せ', '絶対に犯人でないのは誰？', 'ト書きは真実を語る', '南條と朱志香はシロ！',
 	'確実な死者をどんどん探せ', '９人の無実', 'マスターキーが使えない？', '赤き真実に違和感？',
 	'確実に６人を殺した？', '犯人は閉じ込められた？', '共犯の存在', '紗音は譲治以外の誰にでも殺せる',
-	'死んだフリをした犯人がいる。～', 'さらにもう１人犯人がいる？', '譲治と真里亞はニワトリとタマゴ',
+	'死んだフリをした犯人がいる。そしてもう１人犯人がいる。', 'さらにもう１人犯人がいる？', '譲治と真里亞はニワトリとタマゴ',
 	'真里亞犯人説検証', '譲治犯人説検証', '譲治の紫発言', '大人２人、子供１人。',
 	'犯人の３人は家族。', '子供の犯人は戦人',
 ];
 foreach ($hintTexts as $index => $text) {
-	$aliases['ep8_9_hint_' . ($index + 1)] = '{p:32:' . $text . '}';
+	// The PS3 list displays a Japanese full stop after declarative hint names,
+	// although those stops are absent from the strings stored in the SNR.
+	if (preg_match('/[。？！～]$/u', $text) !== 1) {
+		$text .= '。';
+	}
+	$aliases['ep8_9_hint_' . ($index + 1)] = '{p:36:' . $text . '}';
 }
 
 $pageHeadings = [
 	'ep8_9_page_1' => '第一の晩',
 	'ep8_9_page_2' => '第二の晩',
 	'ep8_9_page_3' => '第四の晩',
-	'ep8_9_page_4' => '第五・第六の晩',
+	'ep8_9_page_4' => '第五・六の晩',
 	'ep8_9_page_5' => '第七の晩',
 	'ep8_9_page_6' => '第八の晩',
 ];
@@ -528,32 +544,31 @@ foreach ($pageHeadings as $name => $text) {
 	$aliases[$name] = ':s;#FFFFFF#FFFFFF`{w:645:}{p:13:' . $text . '}';
 }
 
-// These nested topic selectors are part of the PC port's navigation. The PS3
-// screen selects only a chapter, so there are no official PS3 labels for them;
-// keep them as concise summaries of the official Japanese passages below.
+// Exact topic labels transcribed from the Japanese PS3 chapter-selection
+// screen captures.
 $pageTitles = [
-	'ep8_9_page_1_1' => ['Six corpses', '6人の死体', false],
+	'ep8_9_page_1_1' => ['Six corpses', '６人の死体', false],
 	'ep8_9_page_1_2' => ['Checking the corpses', '検死', false],
-	'ep8_9_page_1_3' => ['Locked‐room crime scene?', '犯行現場は密室？', false],
+	'ep8_9_page_1_3' => ['Locked‐room crime scene?', '現場は密室か', false],
 	'ep8_9_page_1_4' => ["Genji's master key", '源次のマスターキー', false],
 	'ep8_9_page_1_5' => ['Regarding master keys', 'マスターキーについて', true],
 	'ep8_9_page_2_1' => ["Natsuhi and Krauss's room", '夏妃と蔵臼の部屋', false],
-	'ep8_9_page_2_2' => ['Checking the room and corpses', '部屋と死体の確認', false],
-	'ep8_9_page_2_3' => ['Alibis for the servants', '使用人たちのアリバイ', false],
+	'ep8_9_page_2_2' => ['Checking the room and corpses', '検死と状況', false],
+	'ep8_9_page_2_3' => ['Alibis for the servants', '使用人のアリバイ', false],
 	'ep8_9_page_2_4' => ['Preserving the crime scene', '現場の保全', false],
 	'ep8_9_page_2_5' => ["The mansion's construction", '屋敷の構造', true],
 	'ep8_9_page_2_6' => ['Culprit of the first twilight', '第一の晩の犯人', true],
-	'ep8_9_page_2_7' => ['Seals on the room', '部屋の封印', true],
-	'ep8_9_page_3_1' => ['Shannon and Kanon vanish', '紗音と嘉音の失踪', false],
+	'ep8_9_page_2_7' => ['Seals on the room', '部屋の封印について', true],
+	'ep8_9_page_3_1' => ['Shannon and Kanon vanish', '消えた紗音と嘉音', false],
 	'ep8_9_page_3_2' => ['Alibis', 'アリバイ', false],
 	'ep8_9_page_3_3' => ["Shannon's master key", '紗音のマスターキー', false],
-	'ep8_9_page_3_4' => ['Kanon and the master key', '嘉音とマスターキー', true],
-	'ep8_9_page_4_1' => ['Two corpses', '2人の死体', false],
+	'ep8_9_page_3_4' => ['Kanon and the master key', 'マスターキーと嘉音', true],
+	'ep8_9_page_4_1' => ['Two corpses', '郷田と熊沢の遺体', false],
 	'ep8_9_page_4_2' => ['Alibis', 'アリバイ', false],
-	'ep8_9_page_4_3' => ['Preserving the crime scene?', '現場の保全？', false],
-	'ep8_9_page_5_1' => ["Nanjo's corpse", '南條の死体', false],
-	'ep8_9_page_5_2' => ['Is one of the four the culprit?', '4人の中に犯人が？', false],
-	'ep8_9_page_6_1' => ["Jessica's corpse", '朱志香の死体', false],
+	'ep8_9_page_4_3' => ['Preserving the crime scene?', '現場の保全は？', false],
+	'ep8_9_page_5_1' => ["Nanjo's corpse", '南條の遺体', false],
+	'ep8_9_page_5_2' => ['Is one of the four the culprit?', '４人の中に犯人が？', false],
+	'ep8_9_page_6_1' => ["Jessica's corpse", '朱志香の遺体', false],
 	'ep8_9_page_6_2' => ['Who killed her?', '誰が殺した？', false],
 ];
 foreach ($pageTitles as $name => [, $text, $red]) {
@@ -592,7 +607,7 @@ foreach ($pages as $name => $entries) {
 	foreach ($entries as $entry) {
 		$text[] = storyEntry($story, $entry[0], $entry[1], $entry[2] ?? null);
 	}
-	$aliases[$name] = ':s;#FFFFFF`{p:3:' . implode('{n}', $text) . '}';
+	$aliases[$name] = ':s;#FFFFFF`{p:3:' . implode('{n}{n}', $text) . '}';
 }
 
 $statements = [
@@ -606,9 +621,18 @@ foreach ($statements as $name => $ranges) {
 	$text = [];
 	foreach ($ranges as $range) {
 		$statement = stripDialogueQuotes(storyText($story, $range[0], $range[1] ?? null));
-		$text[] = preg_replace('/^…+/u', '', $statement);
+		$statement = preg_replace('/^…+/u', '', $statement);
+		$closingTags = '';
+		while (str_ends_with($statement, '}')) {
+			$statement = substr($statement, 0, -1);
+			$closingTags .= '}';
+		}
+		if (!str_ends_with($statement, '。')) {
+			$statement .= '。';
+		}
+		$text[] = $statement . $closingTags;
 	}
-	$aliases[$name] = ':s;#FFFFFF`{p:3:' . implode('{n}', $text) . '}';
+	$aliases[$name] = ':s;#FFFFFF`{p:3:' . implode('{n}{n}', $text) . '}';
 }
 
 $characterSections = [
@@ -617,16 +641,16 @@ $characterSections = [
 	'chars_bernquiz_jes_1' => [
 		['第二の晩', [[99, 100], [115, 116]]],
 		['第四の晩', [[169], [181, 182]]],
-		['第五・第六の晩', [[211, 212], [219]]],
+		['第五・六の晩', [[211, 212], [219]]],
 		['第七の晩', [[237, 238], [243, 244]]],
 	],
 	'chars_bernquiz_geo_1' => [
-		['第一の晩', [[27]]], ['第四の晩', [[172, 173]]], ['第五・第六の晩', [[221]]],
+		['第一の晩', [[27]]], ['第四の晩', [[172, 173]]], ['第五・六の晩', [[221]]],
 		['第七の晩', [[239], [245]]], ['第八の晩', [[261, 262], [269, 270]]],
 	],
 	'chars_bernquiz_but_1' => [
 		['第一の晩', [[26]]], ['第二の晩', [[94, 95], [117, 118]]], ['第四の晩', [[183, 184]]],
-		['第五・第六の晩', [[213, 214], [223, 224]]], ['第七の晩', [[246, 247]]], ['第八の晩', [[265, 266]]],
+		['第五・六の晩', [[213, 214], [223, 224]]], ['第七の晩', [[246, 247]]], ['第八の晩', [[265, 266]]],
 	],
 	'chars_bernquiz_mar_1' => [
 		['第一の晩', [[23, 24]]], ['第二の晩', [[114]]], ['第七の晩', [[240, 241]]],
@@ -634,7 +658,7 @@ $characterSections = [
 	],
 	'chars_bernquiz_nan_1' => [
 		['第一の晩', [[21, 22]]], ['第二の晩', [[96, 98], [119, 120]]],
-		['第四の晩', [[174]]], ['第五・第六の晩', [[209, 210]]],
+		['第四の晩', [[174]]], ['第五・六の晩', [[209, 210]]],
 	],
 	'chars_bernquiz_sha_1' => [['第一の晩', [[18, 19]]], ['第二の晩', [[92], [105]]]],
 	'chars_bernquiz_kan_1' => [['第一の晩', [[20]]], ['第二の晩', [[93], [106]]]],

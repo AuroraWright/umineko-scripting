@@ -39345,6 +39345,8 @@ return
 	scrollable_cfg elemwidth,95,1500
 	scrollable_cfg textmarginwidth,95,10
 	scrollable_cfg textmargintop,95,10
+	scrollable_cfg lastmargin,95,0
+	if localisation == "jp" scrollable_cfg textmargintop,95,0 : scrollable_cfg lastmargin,95,15
 	scrollable_cfg scrollbar,95,220,255,785
 	scrollable_cfg tightfit,95,2 ;top only
 	scrollable_cfg hovertext,95,#FFFFFF,1

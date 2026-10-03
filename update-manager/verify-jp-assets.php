@@ -216,8 +216,24 @@ foreach ([
 	}
 }
 
-// These labels are transcribed from murderer.txa, while the hints are the
-// choice strings embedded in the PS3 Chiru SNR. Keep generated menu text from
+$japaneseHeader = file_get_contents($root . '/script/jp/header.txt');
+if ($japaneseHeader === false || preg_match('/^numalias criminal_header_y,160$/m', $japaneseHeader) !== 1) {
+	throw new RuntimeException('Japanese Bern culprit heading does not match the shared layout');
+}
+if (preg_match('/^numalias criminal_button_y,883$/m', $japaneseHeader) !== 1) {
+	throw new RuntimeException('Japanese Bern culprit button overlaps the bottom profile row');
+}
+$sharedScript = file_get_contents($root . '/script/umi_ftr.txt');
+if ($sharedScript === false || !str_contains(
+	$sharedScript,
+	'if localisation == "jp" scrollable_cfg textmargintop,95,0 : scrollable_cfg lastmargin,95,15'
+)) {
+	throw new RuntimeException('Bern hint scrollable lacks the Japanese layout override');
+}
+
+// The main controls are transcribed from murderer.txa, the hints are choice
+// strings embedded in the PS3 Chiru SNR, and the chapter/topic selectors are
+// transcribed from PS3 gameplay captures. Keep generated menu text from
 // drifting back to translated paraphrases.
 $officialBernPuzzleAliases = [
 	'ep8_9_menu_1' => '物語を再読',
@@ -228,14 +244,43 @@ $officialBernPuzzleAliases = [
 	'ep8_9_menu_6' => '犯人特定',
 	'ep8_9_criminal' => '犯人を選択してください',
 	'ep8_9_criminal_2' => '犯人特定',
+	'ep8_9_page_1' => '第一の晩',
+	'ep8_9_page_2' => '第二の晩',
+	'ep8_9_page_3' => '第四の晩',
+	'ep8_9_page_4' => '第五・六の晩',
+	'ep8_9_page_5' => '第七の晩',
+	'ep8_9_page_6' => '第八の晩',
+	'ep8_9_page_1_1' => '６人の死体',
+	'ep8_9_page_1_2' => '検死',
+	'ep8_9_page_1_3' => '現場は密室か',
+	'ep8_9_page_1_4' => '源次のマスターキー',
+	'ep8_9_page_1_5' => 'マスターキーについて',
+	'ep8_9_page_2_1' => '夏妃と蔵臼の部屋',
+	'ep8_9_page_2_2' => '検死と状況',
+	'ep8_9_page_2_3' => '使用人のアリバイ',
+	'ep8_9_page_2_4' => '現場の保全',
+	'ep8_9_page_2_5' => '屋敷の構造',
+	'ep8_9_page_2_6' => '第一の晩の犯人',
+	'ep8_9_page_2_7' => '部屋の封印について',
+	'ep8_9_page_3_1' => '消えた紗音と嘉音',
+	'ep8_9_page_3_2' => 'アリバイ',
+	'ep8_9_page_3_3' => '紗音のマスターキー',
+	'ep8_9_page_3_4' => 'マスターキーと嘉音',
+	'ep8_9_page_4_1' => '郷田と熊沢の遺体',
+	'ep8_9_page_4_2' => 'アリバイ',
+	'ep8_9_page_4_3' => '現場の保全は？',
+	'ep8_9_page_5_1' => '南條の遺体',
+	'ep8_9_page_5_2' => '４人の中に犯人が？',
+	'ep8_9_page_6_1' => '朱志香の遺体',
+	'ep8_9_page_6_2' => '誰が殺した？',
 ];
 $officialBernHints = [
-	'信用できる紫発言を探せ', '絶対に犯人でないのは誰？', 'ト書きは真実を語る', '南條と朱志香はシロ！',
-	'確実な死者をどんどん探せ', '９人の無実', 'マスターキーが使えない？', '赤き真実に違和感？',
-	'確実に６人を殺した？', '犯人は閉じ込められた？', '共犯の存在', '紗音は譲治以外の誰にでも殺せる',
-	'死んだフリをした犯人がいる。～', 'さらにもう１人犯人がいる？', '譲治と真里亞はニワトリとタマゴ',
-	'真里亞犯人説検証', '譲治犯人説検証', '譲治の紫発言', '大人２人、子供１人。',
-	'犯人の３人は家族。', '子供の犯人は戦人',
+	'信用できる紫発言を探せ。', '絶対に犯人でないのは誰？', 'ト書きは真実を語る。', '南條と朱志香はシロ！',
+	'確実な死者をどんどん探せ。', '９人の無実。', 'マスターキーが使えない？', '赤き真実に違和感？',
+	'確実に６人を殺した？', '犯人は閉じ込められた？', '共犯の存在。', '紗音は譲治以外の誰にでも殺せる。',
+	'死んだフリをした犯人がいる。そしてもう１人犯人がいる。', 'さらにもう１人犯人がいる？', '譲治と真里亞はニワトリとタマゴ。',
+	'真里亞犯人説検証。', '譲治犯人説検証。', '譲治の紫発言。', '大人２人、子供１人。',
+	'犯人の３人は家族。', '子供の犯人は戦人。',
 ];
 foreach ($officialBernHints as $index => $text) {
 	$officialBernPuzzleAliases['ep8_9_hint_' . ($index + 1)] = $text;
@@ -244,6 +289,14 @@ foreach ($officialBernPuzzleAliases as $name => $text) {
 	$pattern = '/^stralias ' . preg_quote($name, '/') . ',".*' . preg_quote($text, '/') . '.*"$/mu';
 	if (preg_match($pattern, $japaneseMenu) !== 1) {
 		throw new RuntimeException("Bern puzzle alias does not match the official PS3 text: $name");
+	}
+}
+foreach (array_merge(['ep8_9_hint_unknown'], array_map(
+	static fn (int $hint): string => 'ep8_9_hint_' . $hint,
+	range(1, 21)
+)) as $name) {
+	if (preg_match('/^stralias ' . preg_quote($name, '/') . ',"\{p:36:.*\}"$/mu', $japaneseMenu) !== 1) {
+		throw new RuntimeException("Bern hint does not match the chapter-topic text size: $name");
 	}
 }
 $officialBernAnswerAliases = [
@@ -263,7 +316,7 @@ $officialBernRuleText = [
 	'犯人は殺人以前にもウソをつく可能性がある。',
 	'犯人でない人物は、真実のみを語る。',
 	'犯人でない人物は、犯人に協力しない。',
-	'犯人は全ての殺人を、自らの手で直接行なう。',
+	'犯人は全ての殺人を、自らの手で直接行う。',
 	'犯人が死ぬことはない。',
 	'犯人は登場人物の中にいる。',
 	'紫の発言は、赤き真実と同じ価値がある。',
@@ -274,6 +327,62 @@ foreach ($officialBernRuleText as $text) {
 	if (!str_contains($japaneseMenu, $text)) {
 		throw new RuntimeException("Bern puzzle rules do not match the official PS3 wording: $text");
 	}
+}
+if (!str_contains($japaneseMenu, 'stralias ep8_9_rules,":s;#FFFFFF`{p:34:')) {
+	throw new RuntimeException('Bern puzzle rules do not use the PS3-sized Japanese preset');
+}
+$japaneseCode = file_get_contents($root . '/script/jp/code.txt');
+if ($japaneseCode === false || !str_contains(
+	$japaneseCode,
+	'preset_define 34,1,55,#FFFFFF,0,0,0,1,8,#000000,0,0,0,#000000,2,55,1590'
+)) {
+	throw new RuntimeException('Missing or changed PS3-sized Bern puzzle rules preset');
+}
+if (!str_contains(
+	$japaneseCode,
+	'preset_define 35,1,3,#FFFFFF,0,0,0,0,0,#000000,0,0,0,#000000,0,3,1590'
+)) {
+	throw new RuntimeException('Missing or changed Bern puzzle rule spacer preset');
+}
+if (!str_contains(
+	$japaneseCode,
+	'preset_define 36,2,50,#FFFFFF,1,0,0,1,10,#000000,0,0,0,#000000,3,50,1500'
+)) {
+	throw new RuntimeException('Missing or changed Bern hint-row preset');
+}
+if (substr_count($japaneseMenu, '{n}{p:35:　}{n}') !== 10) {
+	throw new RuntimeException('Bern puzzle rules do not contain the expected vertical spacers');
+}
+foreach (['ep8_9_page_1_5_t', 'ep8_9_page_2_5_t', 'ep8_9_page_2_6_t', 'ep8_9_page_2_7_t', 'ep8_9_page_3_4_t'] as $name) {
+	if (preg_match('/^stralias ' . preg_quote($name, '/') . ',".*。\}+"$/mu', $japaneseMenu) !== 1) {
+		throw new RuntimeException("Bern puzzle red-section statement lacks final punctuation: $name");
+	}
+}
+$bernSpacingChecks = [
+	// Chapter view: blank line between speaker/statement blocks, but the
+	// statement remains directly below its character name.
+	'」{n}{n}熊沢{n}「',
+	// Character view: blank line between statements, but the first statement
+	// remains directly below its night heading.
+	'■第一の晩{n}「それで後は大騒ぎだ。',
+	'集まった}」{n}{n}「',
+	// Red statements have no speaker heading, so the blank line goes directly
+	// between their complete statement blocks.
+	'施錠、開錠が可能。}{n}{n}{p:1:マスターキー以外',
+];
+foreach ($bernSpacingChecks as $spacing) {
+	if (!str_contains($japaneseMenu, $spacing)) {
+		throw new RuntimeException('Bern puzzle statement spacing does not match the Japanese layout');
+	}
+}
+$bernStart = strpos($japaneseMenu, ';bern quiz');
+$bernEnd = $bernStart === false ? false : strpos($japaneseMenu, '; trophies', $bernStart);
+if ($bernStart === false || $bernEnd === false) {
+	throw new RuntimeException('Unable to locate the generated Bern puzzle aliases');
+}
+$bernMenu = substr($japaneseMenu, $bernStart, $bernEnd - $bernStart);
+if (preg_match('/(?:■[^{}]+|(?:蔵臼|夏妃|絵羽|秀吉|留弗夫|霧江|楼座|戦人|朱志香|譲治|真里亞|源次|紗音|嘉音|郷田|熊沢|南條))\{n\}\{n\}「/u', $bernMenu) === 1) {
+	throw new RuntimeException('Bern puzzle has a blank line directly below a heading');
 }
 
 $officialPs3UiText = [

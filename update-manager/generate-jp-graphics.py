@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build graphics/locale_jp from the Japanese PS3 bitmap extraction."""
+"""Build graphics_jp/locale_jp from the Japanese PS3 bitmap extraction."""
 
 from __future__ import annotations
 
@@ -9,14 +9,15 @@ import sys
 import tempfile
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "jp_graphics_ps3"
+RONDO_EXTRACT = ROOT / "data_extract_ps3"
 RUSSIAN = ROOT / "graphics" / "locale"
 ENGLISH = ROOT / "graphics" / "locale_en"
-OUTPUT = ROOT / "graphics" / "locale_jp"
+OUTPUT = ROOT / "graphics_jp" / "locale_jp"
 TXA_EXTRACTOR = ROOT / "umi_ps3_extract"
 CHIRU_EXTRACT = ROOT / "data_extract_chiru_ps3"
 
@@ -30,14 +31,12 @@ ENDING_PARTS = {
 
 COPIED_PROJECT_ART = {
     "project_logo.png": ENGLISH / "project_logo.png",
-    "circle_logo.png": ENGLISH / "circle_logo.png",
-    # These two Golden Abyss credit cards are only used by the Russian locale,
-    # but keeping them makes locale_jp follow the complete locale structure.
-    "circle_logo_ga.png": RUSSIAN / "circle_logo_ga.png",
-    "circle_logo_ga_2.png": RUSSIAN / "circle_logo_ga_2.png",
-    "murderer/murderer_thumb_all.png": RUSSIAN
-    / "murderer"
-    / "murderer_thumb_all.png",
+}
+
+OMITTED_REFERENCE_ART = {
+    "circle_logo_ga.png",
+    "circle_logo_ga_2.png",
+    "murderer/murderer_thumb_all.png",
 }
 
 
@@ -54,12 +53,28 @@ def open_bitmap(path: Path) -> Image.Image:
     return image
 
 
+def copy_project_art(relative: str, source: Path, destination: Path) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if relative != "project_logo.png":
+        shutil.copy2(source, destination)
+        return
+
+    image = open_bitmap(source).convert("RGB")
+    background = image.getpixel((0, 0))
+    ImageDraw.Draw(image).rectangle(
+        (1220, 1015, image.width, image.height), fill=background
+    )
+    save_png(image, destination)
+
+
 def reference_files() -> dict[Path, Path]:
     """Return the union of both established locale layouts."""
     references: dict[Path, Path] = {}
     for directory in (ENGLISH, RUSSIAN):
         for path in sorted(directory.rglob("*.png")):
-            references.setdefault(path.relative_to(directory), path)
+            relative = path.relative_to(directory)
+            if relative.as_posix() not in OMITTED_REFERENCE_ART:
+                references.setdefault(relative, path)
     return references
 
 
@@ -110,6 +125,20 @@ def generate_text006() -> None:
     lettering.putalpha(mask)
     canvas.alpha_composite(lettering)
     save_png(canvas, OUTPUT / "text006.png")
+
+
+def generate_circle_logo() -> None:
+    """Convert and invert the official PS3 07th Expansion logo."""
+    source = RONDO_EXTRACT / "logos" / "07th.pic"
+    if not source.is_file():
+        raise RuntimeError(f"missing PS3 07th Expansion logo: {source}")
+    if not TXA_EXTRACTOR.is_file():
+        raise RuntimeError(f"missing PS3 picture extractor: {TXA_EXTRACTOR}")
+    with tempfile.TemporaryDirectory(prefix="umineko-07th-logo-") as temporary:
+        bitmap = Path(temporary) / "07th.bmp"
+        subprocess.run([str(TXA_EXTRACTOR), str(source), str(bitmap)], check=True)
+        logo = open_bitmap(bitmap).convert("RGB")
+        save_png(ImageOps.invert(logo), OUTPUT / "circle_logo.png")
 
 
 def crop_endings() -> None:
@@ -170,7 +199,7 @@ def main() -> int:
 
     references = reference_files()
     special = set(COPIED_PROJECT_ART)
-    special.update({"text006.png", "end_8a_small.png"})
+    special.update({"text006.png", "circle_logo.png", "end_8a_small.png"})
     special.update(
         f"{stem}_{index}.png"
         for stem, heights in ENDING_PARTS.items()
@@ -197,10 +226,10 @@ def main() -> int:
         convert_direct(source, reference, OUTPUT / relative)
 
     generate_text006()
+    generate_circle_logo()
     for relative, source in COPIED_PROJECT_ART.items():
         destination = OUTPUT / relative
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination)
+        copy_project_art(relative, source, destination)
 
     crop_endings()
     make_murderer_thumbnails()

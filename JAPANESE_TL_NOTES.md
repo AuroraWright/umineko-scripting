@@ -25,20 +25,25 @@ port's dimensions and sprite-cell conventions.
 
 The reproducible builders are:
 
-- `update-manager/generate-jp-graphics.py` for `graphics/locale_jp`;
+- `update-manager/generate-jp-graphics.py` for `graphics_jp/locale_jp`;
 - `update-manager/generate-jp-caches.py` for the runtime cache routine;
-- `update-manager/generate-jp-menu-graphics.py` for `graphics/menu_jp`, the
+- `update-manager/generate-jp-menu-graphics.py` for `graphics_jp/menu_jp`, the
   Japanese message windows, and the Japanese cinema logos.
 
 Generated PNGs should be changed through those builders rather than edited in
 place.
 
+`graphics_jp` is supplied as an overlay for the ordinary `graphics` tree.
+Runtime script paths therefore continue to use `graphics\...`; the overlay
+provides the Japanese files at those paths without rewriting the scripts to
+refer to `graphics_jp` directly.
+
 ### Direct official PS3 assets
 
-#### Scenario graphics in `graphics/locale_jp`
+#### Scenario graphics in `graphics_jp/locale_jp`
 
 Except for the files listed under the adapted and shared-port sections below,
-the files in `graphics/locale_jp` are conversions of complete Japanese PS3 BMP
+the files in `graphics_jp/locale_jp` are conversions of complete Japanese PS3 BMP
 assets from `jp_graphics_ps3`. The builder may resize a bitmap to the dimensions
 of the corresponding established locale file, but it does not draw or replace
 any visible content.
@@ -76,16 +81,17 @@ project-rendered image or text data:
 
 | Output | Official source |
 | --- | --- |
-| `graphics/menu_jp/title/title1_text_{start,ep1,ep2,ep3,ep4,load,bgm,cg,chars,config,tea,tips,ura}.png` | Rondo `title1.txa` text layers. |
-| `graphics/menu_jp/title/title1_logo.png` | Rondo `title1.txa` `logo`. |
-| `graphics/menu_jp/title/chiru/title1_text_{ep5,ep6,ep7,ep8}.png` | Chiru `title1.txa` text layers. |
-| `graphics/menu_jp/title/chiru/title1_logo.png` | Chiru `title1.txa` `logo`. |
-| `graphics/menu_jp/{bgmmode,cgmode,chars,config,logview,save,tips}/*_caption.png` | Corresponding Chiru TXA `caption` layers. `trophy_caption.png` is excluded and documented below. |
-| `graphics/menu_jp/cgmode/{cgmode_logo_chiru,cgmode_logox}.png` | Chiru `cgmode.txa`. |
-| `graphics/menu_jp/cgmode/cgmode_logo.png` | Rondo `cgmode.txa`. |
-| `graphics/menu_jp/quiz/{m1,m2}.png` | Japanese PS3 medal-notice bitmaps. |
-| `graphics/menu_jp/quiz2/{quiz2_back,quiz2_front}.png` | Chiru `last.txa`. |
-| `graphics/system/wnd/{msgwnd_jp,msgwnd_ep5_jp}.png` | Rondo and Chiru `msgwnd.txa`; centered in the port canvas when required. |
+| `graphics_jp/menu_jp/title/title1_text_{start,ep1,ep2,ep3,ep4,load,bgm,cg,chars,config,tea,tips,ura}.png` | Rondo `title1.txa` text layers. |
+| `graphics_jp/menu_jp/title/title1_logo.png` | Rondo `title1.txa` `logo`. |
+| `graphics_jp/menu_jp/title/chiru/title1_text_{ep5,ep6,ep7,ep8}.png` | Chiru `title1.txa` text layers. |
+| `graphics_jp/menu_jp/title/chiru/title1_logo.png` | Chiru `title1.txa` `logo`. |
+| `graphics_jp/menu_jp/{bgmmode,cgmode,chars,config,logview,save,tips}/*_caption.png` | Corresponding Chiru TXA `caption` layers. `trophy_caption.png` is excluded and documented below. |
+| `graphics_jp/menu_jp/cgmode/{cgmode_logo_chiru,cgmode_logox}.png` | Chiru `cgmode.txa`. |
+| `graphics_jp/menu_jp/cgmode/cgmode_logo.png` | Rondo `cgmode.txa`. |
+| `graphics_jp/menu_jp/quiz/{m1,m2}.png` | Japanese PS3 medal-notice bitmaps. |
+| `graphics_jp/menu_jp/quiz2/{quiz2_back,quiz2_front}.png` | Chiru `last.txa`. |
+| `graphics_jp/system/wnd/{msgwnd_jp,msgwnd_ep5_jp}.png` | Rondo and Chiru `msgwnd.txa`; centered in the port canvas when required. |
+| `graphics_jp/locale_jp/circle_logo.png` | Rondo `logos/07th.pic`; the Chiru copy is byte-identical. The decoded 1920×1080 image is color-inverted to reproduce the white-on-black presentation used by the port. |
 
 ### Adapted without newly generated visible content
 
@@ -94,29 +100,27 @@ official PS3 and existing port pixels:
 
 | Output | Source and mechanical adaptation |
 | --- | --- |
-| `graphics/locale_jp/end_1a_[1-3].png` | Vertical slices of PS3 `end_1a.bmp`. |
-| `graphics/locale_jp/end_2a_[1-3].png` | Vertical slices of PS3 `end_2a.bmp`. |
-| `graphics/locale_jp/end_2c_[1-2].png` | Vertical slices of PS3 `end_2c.bmp`. |
-| `graphics/locale_jp/end_3a_[1-4].png` | Vertical slices of PS3 `end_3a.bmp`. |
-| `graphics/locale_jp/end_3b_[1-2].png` | Removes 340 blank rows from PS3 `end_3b.bmp`, then splits it at the port's scrolling boundary. |
-| `graphics/locale_jp/end_1c_[1-2].png` | Vertical slices of revised PS3 `reend_1c.bmp`. |
-| `graphics/locale_jp/end_8a_small.png` | Resizes PS3 `end_8a.bmp` for the low-memory path and removes the top 540 rows required by the runtime transform. |
-| `graphics/menu_jp/quiz/ask_auntie_eva.png` | Crops, reorders, and aligns the two official button states from Chiru `quiz.txa` to the port's normal/hover order. |
-| `graphics/menu_jp/save/{saveload_area,saveload_area_5}.png` | Existing English port layouts with the corresponding Japanese Rondo/Chiru PS3 logo composited into the reserved area. |
-| `graphics/menu_jp/jump/EP1.png` | The first 17 existing port cells plus a final cell cropped from the already-Japanese PS3 ending art in `end_1a_2.png`. The sheet itself has no PS3 menu equivalent. |
-| `graphics/system/logo/cinema_logo_jp.png` | PS3 Rondo `cinema_logo.bmp`, centered on the port canvas. |
-| `graphics/system/logo/cinema_logo2_jp.png` | PS3 Chiru `cinema_logo3.bmp`, proportionally reduced and centered on the port canvas. |
+| `graphics_jp/locale_jp/end_1a_[1-3].png` | Vertical slices of PS3 `end_1a.bmp`. |
+| `graphics_jp/locale_jp/end_2a_[1-3].png` | Vertical slices of PS3 `end_2a.bmp`. |
+| `graphics_jp/locale_jp/end_2c_[1-2].png` | Vertical slices of PS3 `end_2c.bmp`. |
+| `graphics_jp/locale_jp/end_3a_[1-4].png` | Vertical slices of PS3 `end_3a.bmp`. |
+| `graphics_jp/locale_jp/end_3b_[1-2].png` | Removes 340 blank rows from PS3 `end_3b.bmp`, then splits it at the port's scrolling boundary. |
+| `graphics_jp/locale_jp/end_1c_[1-2].png` | Vertical slices of revised PS3 `reend_1c.bmp`. |
+| `graphics_jp/locale_jp/end_8a_small.png` | Resizes PS3 `end_8a.bmp` for the low-memory path and removes the top 540 rows required by the runtime transform. |
+| `graphics_jp/menu_jp/quiz/ask_auntie_eva.png` | Crops, reorders, and aligns the two official button states from Chiru `quiz.txa` to the port's normal/hover order. |
+| `graphics_jp/menu_jp/save/{saveload_area,saveload_area_5}.png` | Existing English port layouts with the corresponding Japanese Rondo/Chiru PS3 logo composited into the reserved area. |
+| `graphics_jp/menu_jp/jump/EP1.png` | The first 17 existing port cells plus a final cell cropped from the already-Japanese PS3 ending art in `end_1a_2.png`. The sheet itself has no PS3 menu equivalent. |
+| `graphics_jp/system/logo/cinema_logo_jp.png` | PS3 Rondo `cinema_logo.bmp`, centered on the port canvas. |
+| `graphics_jp/system/logo/cinema_logo2_jp.png` | PS3 Chiru `cinema_logo3.bmp`, proportionally reduced and centered on the port canvas. |
+| `graphics_jp/locale_jp/project_logo.png` | Existing English port project logo with the bottom-right Witch Hunt translation note removed from the uniform black background. The centered project logo is unchanged. |
 
 The following are reused project assets and contain no newly generated data:
 
 | Output | Existing source and status |
 | --- | --- |
-| `graphics/locale_jp/{project_logo,circle_logo}.png` | Copied from `graphics/locale_en`; shared project branding. |
-| `graphics/locale_jp/{circle_logo_ga,circle_logo_ga_2}.png` | Copied from `graphics/locale`; Russian-only Golden Abyss cards retained for locale-tree completeness and not selected by the Japanese script. |
-| `graphics/locale_jp/murderer/murderer_thumb_all.png` | Shared port atlas copied from `graphics/locale`; the individual Japanese thumbnails are official PS3 conversions. |
-| `graphics/menu_jp/empty.png` | Copy of the shared one-pixel transparent stub used for the hidden Grimoire button and caption. |
-| `graphics/menu_jp/config/{config_left,config_right}.png` | Existing language-neutral port arrows. |
-| `graphics/menu_jp/quiz/quizbtn[1-6].png` | Existing port answer-letter buttons, loaded through a dynamic filename prefix and reused without localization. |
+| `graphics_jp/menu_jp/empty.png` | Copy of the shared one-pixel transparent stub used for the hidden Grimoire button and caption. |
+| `graphics_jp/menu_jp/config/{config_left,config_right}.png` | Existing language-neutral port arrows. |
+| `graphics_jp/menu_jp/quiz/quizbtn[1-6].png` | Existing port answer-letter buttons, loaded through a dynamic filename prefix and reused without localization. |
 
 ### Copied English menu graphics
 
@@ -131,7 +135,7 @@ direct PS3 conversion.
 | `SystemBtn/tips.png` | 1 | Tips. |
 | `r_click_menu/r_btn_{char,clear,load2,logs,save2,setting,system,tips}.png` | 8 | Normal and selected right-click menu labels. |
 | Every `title_menu/*.png` except `unlock_kaku_bg.png`, `yes.png`, and `no.png` | 64 | Port title-menu strips, including episode selectors, Start, Load, Music Box, Tips, Tea Party, Exit, Unlock, Official Site, and new-item variants. |
-| `graphics/system/loading_en.png` | 1 | Four-cell English Loading animation shared outside `graphics/menu_jp`. |
+| `graphics/system/loading_en.png` | 1 | Four-cell English Loading animation shared outside `graphics_jp/menu_jp`. |
 
 The unchanged `config/config_left.png` and `config/config_right.png` files are
 language-neutral navigation arrows. The six `quiz/quizbtn[1-6].png` files are
@@ -188,7 +192,7 @@ was found in the audited material.
 
 #### Next-episode notice
 
-`graphics/locale_jp/text006.png` combines the complete PS3 `chess1.bmp`
+`graphics_jp/locale_jp/text006.png` combines the complete PS3 `chess1.bmp`
 background with newly rendered Japanese text for the English port's
 next-episode and new-elements notices. `generate_text006` in
 `update-manager/generate-jp-graphics.py` uses the supplied
@@ -210,7 +214,7 @@ official conversions.
 
 #### Chapter cards
 
-`graphics/menu_jp/r_click_menu/chapters/*.png` contains 164 newly rendered port
+`graphics_jp/menu_jp/r_click_menu/chapters/*.png` contains 164 newly rendered port
 cards. The 139 numbered chapter titles and dates, and the official labels
 `オープニング`, `Tea party`, and `????`, come from the `SECTION_START` and
 `CHAPTER` records in `snr/output/script_rondo.xml` and
@@ -242,7 +246,7 @@ the PS3 runtime positioning and blending remain unverified.
 
 #### Config overlay
 
-`graphics/menu_jp/config/config_main.png` is newly rendered for the port's
+`graphics_jp/menu_jp/config/config_main.png` is newly rendered for the port's
 three-panel configuration layout. Its Japanese headings and endpoint labels
 use terminology selected from the Japanese PS3 Config UI where an equivalent
 exists, while the port-only structure and positioning are project work.
@@ -274,8 +278,8 @@ panels were the visual references for placement, color, and tone.
 
 #### Confirmation controls
 
-`graphics/menu_jp/SystemBtn/{yes,no,title_bg}.png` and
-`graphics/menu_jp/title_menu/{yes,no,unlock_kaku_bg}.png` contain project
+`graphics_jp/menu_jp/SystemBtn/{yes,no,title_bg}.png` and
+`graphics_jp/menu_jp/title_menu/{yes,no,unlock_kaku_bg}.png` contain project
 translations of port controls for which no matching PS3 bitmap was found.
 
 - `はい` and `いいえ` use `SHINJIMinchoW7.otf` at 36 pixels, condensed to 85
@@ -293,7 +297,7 @@ other locales.
 
 #### Trophy caption
 
-`graphics/menu_jp/trophy/trophy_caption.png` retains the existing port pill
+`graphics_jp/menu_jp/trophy/trophy_caption.png` retains the existing port pill
 background but replaces its text with newly rendered `Trophies` and
 `トロフィー`. The Japanese word is a project translation; no corresponding PS3
 trophy caption was found.
@@ -304,7 +308,7 @@ for tracking, vertical placement, white fill, and black outline.
 
 #### Generated hover treatment
 
-`graphics/menu_jp/quiz2/quiz2_front_2.png` starts with the official Japanese
+`graphics_jp/menu_jp/quiz2/quiz2_front_2.png` starts with the official Japanese
 `last.txa` front layer and programmatically adds the narrow pale outline and
 brighter silver fill used by the port's selected Magic/Trick state. The words
 themselves are official pixels; the selection effect is generated because the
@@ -315,6 +319,12 @@ PS3 archive has no separate hover layer.
 The Japanese locale intentionally omits `SystemBtn/grimoire_btn.png` and
 `notes/notes_caption.png`, and stubs their aliases with `empty.png`. The unused
 `on.png`, `on_1.png`, `off.png`, and `off_1.png` are also omitted.
+
+`graphics_jp/locale_jp/{circle_logo_ga,circle_logo_ga_2}.png` are omitted because
+the Golden Abyss credit cards are selected only by the Russian locale.
+`graphics_jp/locale_jp/murderer/murderer_thumb_all.png` is also omitted: the
+shared murderer screen loads its atlas directly from `graphics/locale`, while
+the Japanese locale supplies the individual official PS3 thumbnails.
 
 Only the Grimoire switch button is hidden. Episode 8's Tips button retains its
 shared destination and opens the empty Grimoire page; the internal Grimoire
@@ -330,7 +340,7 @@ shared highlight commands.
    source used for its visual style.
 3. Add the source or generation step to
    `update-manager/generate-jp-menu-graphics.py`. A PNG placed only in
-   `graphics/menu_jp` is deleted by the next rebuild.
+   `graphics_jp/menu_jp` is deleted by the next rebuild.
 4. Rebuild and verify the complete asset set:
 
    ```sh

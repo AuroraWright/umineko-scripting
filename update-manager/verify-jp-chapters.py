@@ -25,7 +25,7 @@ assert [font.index(c) for c in ' A　あア'] == [0, 33, 96, 379, 473]
 for index in range(len(font.offsets)):
     font.glyph(index)  # validates compressed lengths and backreferences
 
-active = ROOT / 'graphics/menu_jp/r_click_menu/chapters'
+active = ROOT / 'graphics_jp/menu_jp/r_click_menu/chapters'
 with tempfile.TemporaryDirectory(prefix='ps3-chapter-check-') as temp:
     builder.OUTPUT = Path(temp)
     generated = builder.OUTPUT / 'r_click_menu/chapters'

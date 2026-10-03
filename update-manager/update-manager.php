@@ -511,7 +511,7 @@ function redirectJapaneseCacheSources($str, $scripting) {
 		$new = 'stralias '.$alias.',":c;graphics\\locale_jp\\'.$relativePath.'"';
 		if (substr_count($str, $old) != 1)
 			err('Unable to find Japanese cache source alias '.$alias);
-		$asset = $scripting.'/graphics/locale_jp/'.str_replace('\\', '/', $relativePath);
+		$asset = $scripting.'/graphics_jp/locale_jp/'.str_replace('\\', '/', $relativePath);
 		if (!is_file($asset))
 			err('Missing Japanese cache source '.$asset);
 		$str = str_replace($old, $new, $str);
@@ -649,7 +649,7 @@ function main($argc, $argv) {
 				$footer = str_replace('graphics\\locale_en\\', 'graphics\\locale_jp\\', $footer);
 				$footer = hideJapaneseGrimoireButtons($footer);
 				$footer = stubJapaneseOmakeRoutes($footer);
-				$japaneseEndCard = $scripting.'/graphics/locale_jp/end_4a.png';
+				$japaneseEndCard = $scripting.'/graphics_jp/locale_jp/end_4a.png';
 				if (!is_file($japaneseEndCard))
 					err('Missing Japanese asset '.$japaneseEndCard);
 				$footer = str_replace('24299420 mov $Free1,verify_updates', filesize($japaneseEndCard).' mov $Free1,verify_updates', $footer);

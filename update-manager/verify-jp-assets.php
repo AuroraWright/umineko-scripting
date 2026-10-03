@@ -2,7 +2,7 @@
 
 /*
  * Verify that the Japanese locale follows the English asset declarations while
- * resolving locale-specific images from graphics/locale_jp.
+ * resolving locale-specific images from graphics_jp/locale_jp.
  */
 
 declare(strict_types=1);
@@ -26,7 +26,7 @@ function assetLines(string $path): array
 
 	return array_values(array_filter(
 		$lines,
-		static fn (string $line): bool => preg_match('/(?:graphics|video|legacy)[\\\\\/]/i', $line) === 1,
+		static fn (string $line): bool => preg_match('/(?:graphics(?:_jp)?|video|legacy)[\\\\\/]/i', $line) === 1,
 	));
 }
 
@@ -52,8 +52,8 @@ for ($episode = 2; $episode <= 8; $episode++) {
 
 $assetCount = 0;
 // Both hidden Grimoire image loads rely on this transparent 1px PNG.
-if (!is_file($root . '/graphics/menu_jp/empty.png') ||
-	hash_file('sha256', $root . '/graphics/menu_jp/empty.png') !==
+if (!is_file($root . '/graphics_jp/menu_jp/empty.png') ||
+	hash_file('sha256', $root . '/graphics_jp/menu_jp/empty.png') !==
 	'11b9c95a68e295dddd0ea924647536578ce285b2c8469a223c01df1ff3166af1') {
 	throw new RuntimeException('Missing or changed transparent Grimoire image stub');
 }
@@ -129,7 +129,7 @@ foreach ($localeFiles as $file) {
 		}
 		$directory = $matches[1];
 		$relative = str_replace('\\', '/', $matches[2]);
-		$path = $root . '/graphics/' . $directory . '/' . $relative;
+		$path = $root . '/graphics_jp/' . $directory . '/' . $relative;
 		if (!is_file($path)) {
 			$missing[] = $directory . '/' . $relative;
 		}
@@ -353,7 +353,7 @@ $officialMemoryHashes = [
 	'kakera/kakera_memory10.png' => 'c284403d94ad1a8fd917173523c7dc7fb11af96cc3641303d44c83ab042f053a',
 ];
 foreach ($officialMemoryHashes as $relative => $expectedHash) {
-	$path = $root . '/graphics/locale_jp/' . $relative;
+	$path = $root . '/graphics_jp/locale_jp/' . $relative;
 	if (!is_file($path) || hash_file('sha256', $path) !== $expectedHash) {
 		throw new RuntimeException("Unexpected Japanese PS3 memory screen $relative");
 	}
@@ -409,7 +409,7 @@ for ($number = 1; $number <= 6; $number++) {
 	$menuReferences['quiz/quizbtn' . $number . '.png'] = true;
 }
 $activeFiles = [];
-$activeRoot = $root . '/graphics/menu_jp';
+$activeRoot = $root . '/graphics_jp/menu_jp';
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($activeRoot)) as $file) {
 	if ($file->isFile() && strtolower($file->getExtension()) === 'png') {
 		$relative = str_replace('\\', '/', substr($file->getPathname(), strlen($activeRoot) + 1));
@@ -432,21 +432,6 @@ foreach (new RecursiveIteratorIterator(
 }
 if ($emptyDirectories !== []) {
 	throw new RuntimeException('Empty directories in active Japanese menu tree: ' . implode(', ', $emptyDirectories));
-}
-
-$expectedUnused = [
-];
-$unusedRoot = $root . '/graphics/menu_jp_unused';
-$unusedFiles = [];
-foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($unusedRoot)) as $file) {
-	if ($file->isFile() && strtolower($file->getExtension()) === 'png') {
-		$unusedFiles[] = str_replace('\\', '/', substr($file->getPathname(), strlen($unusedRoot) + 1));
-	}
-}
-sort($unusedFiles);
-sort($expectedUnused);
-if ($unusedFiles !== $expectedUnused) {
-	throw new RuntimeException('Unexpected Japanese unused-menu graphics inventory');
 }
 
 $officialGraphicHashes = [
@@ -490,7 +475,7 @@ $cinemaLogoHashes = [
 	'cinema_logo2_jp.png' => 'ed9536bcc172a39a2d3cc06d285e9d66c3970e69db9319cfd39e3aa434cf71be',
 ];
 foreach ($cinemaLogoHashes as $filename => $expectedHash) {
-	if (hash_file('sha256', $root . '/graphics/system/logo/' . $filename) !== $expectedHash) {
+	if (hash_file('sha256', $root . '/graphics_jp/system/logo/' . $filename) !== $expectedHash) {
 		throw new RuntimeException("Unexpected Japanese PS3 cinema logo $filename");
 	}
 }
@@ -500,10 +485,10 @@ $messageWindowHashes = [
 	'msgwnd_ep5_jp.png' => 'ff6a7d330059175f7aa85be5b24b67397d1a993b40de1fa3b47c70b5722475c7',
 ];
 foreach ($messageWindowHashes as $filename => $expectedHash) {
-	$path = $root . '/graphics/system/wnd/' . $filename;
+	$path = $root . '/graphics_jp/system/wnd/' . $filename;
 	if (!is_file($path) || hash_file('sha256', $path) !== $expectedHash) {
 		throw new RuntimeException("Unexpected Japanese PS3 message window $filename");
 	}
 }
 
-echo "Verified $assetCount Japanese asset references, 14 direct PS3 memory screens, two PS3 message windows, 298 active and 0 unused menu graphics, localized port controls, no empty menu directories, no soft subtitles, 75 trophies, credits, and hidden Grimoire navigation" . PHP_EOL;
+echo "Verified $assetCount Japanese asset references, 14 direct PS3 memory screens, two PS3 message windows, 298 active menu graphics, localized port controls, no empty menu directories, no soft subtitles, 75 trophies, credits, and hidden Grimoire navigation" . PHP_EOL;

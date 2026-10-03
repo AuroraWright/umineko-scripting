@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build active and unused Japanese menu graphics from the PS3 assets."""
+"""Build active Japanese menu graphics from the PS3 assets."""
 
 from __future__ import annotations
 
@@ -19,10 +19,11 @@ EXTRACTOR = ROOT / "umi_ps3_extract"
 QUESTION = ROOT / "data_extract_ps3"
 ANSWER = ROOT / "data_extract_chiru_ps3"
 ENGLISH = ROOT / "graphics" / "menu_en"
-OUTPUT = ROOT / "graphics" / "menu_jp"
-UNUSED = ROOT / "graphics" / "menu_jp_unused"
 JAPANESE_BITMAPS = ROOT / "jp_graphics_ps3"
-SYSTEM_WND = ROOT / "graphics" / "system" / "wnd"
+OUTPUT = ROOT / "graphics_jp" / "menu_jp"
+SYSTEM_WND = ROOT / "graphics_jp" / "system" / "wnd"
+SYSTEM_LOGO = ROOT / "graphics_jp" / "system" / "logo"
+REFERENCE_SYSTEM_WND = ROOT / "graphics" / "system" / "wnd"
 SNR_XML = (ROOT / "snr" / "output" / "script_rondo.xml", ROOT / "snr" / "output" / "script_chiru.xml")
 
 
@@ -437,7 +438,7 @@ def generate_saveload_logos() -> None:
 def generate_ep1_jump() -> None:
     """Use the original Japanese ending artwork for EP1's final jump cell."""
     source = Image.open(ENGLISH / "jump" / "EP1.png").convert("RGBA")
-    ending = Image.open(ROOT / "graphics" / "locale_jp" / "end_1a_2.png").convert("RGBA")
+    ending = Image.open(ROOT / "graphics_jp" / "locale_jp" / "end_1a_2.png").convert("RGBA")
     if source.size != (640, 6480) or ending.size != (1920, 6120):
         raise RuntimeError("unexpected EP1 jump-sheet or ending-art dimensions")
     # Match the English thumbnail's viewport within the scrolling ending art.
@@ -455,7 +456,7 @@ def generate_message_windows(question_temp: Path, answer_temp: Path) -> None:
         save_png(
             assets["msgwnd"],
             SYSTEM_WND / destination,
-            SYSTEM_WND / reference,
+            REFERENCE_SYSTEM_WND / reference,
         )
 
 
@@ -471,7 +472,7 @@ def generate_cinema_logos() -> None:
         logo.thumbnail((960, 280), Image.Resampling.LANCZOS)
         canvas = Image.new("RGBA", (960, 280))
         canvas.alpha_composite(logo, ((960 - logo.width) // 2, (280 - logo.height) // 2))
-        save_image(canvas, ROOT / "graphics/system/logo" / destination)
+        save_image(canvas, SYSTEM_LOGO / destination)
 
 
 def quiz2_highlight(base: Image.Image) -> Image.Image:
@@ -534,7 +535,7 @@ def generate_quiz2_highlight() -> None:
     save_image(quiz2_highlight(base), OUTPUT / "quiz2" / "quiz2_front_2.png")
 
 
-def move_unused_graphics() -> int:
+def verify_no_unused_graphics() -> None:
     expected = set()
     references = set()
     pattern = re.compile(r'graphics[\\\\/]menu_jp[\\\\/]([^"`;]+?\.png)', re.IGNORECASE)
@@ -549,15 +550,8 @@ def move_unused_graphics() -> int:
     if unused != expected:
         raise RuntimeError(f"unexpected unused Japanese menu graphics: {sorted(unused)}")
 
-    if UNUSED.exists():
-        shutil.rmtree(UNUSED)
-    UNUSED.mkdir(parents=True, exist_ok=True)
-    for relative in sorted(unused):
-        destination = UNUSED / relative
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.move(OUTPUT / relative, destination)
-    # copytree preserves source directories after their only file is moved.
-    # Remove those empty artifacts from the active Japanese menu tree.
+    # copytree can preserve empty source directories. Remove those artifacts
+    # from the active Japanese menu tree.
     directories = sorted(
         (path for path in OUTPUT.rglob("*") if path.is_dir()),
         key=lambda path: len(path.parts),
@@ -566,7 +560,6 @@ def move_unused_graphics() -> int:
     for directory in directories:
         if not any(directory.iterdir()):
             directory.rmdir()
-    return len(unused)
 
 
 def extract(archive: Path, directory: Path) -> dict[str, Path]:
@@ -679,12 +672,9 @@ def main() -> None:
     generate_saveload_logos()
     generate_ep1_jump()
     generate_cinema_logos()
-    unused_count = move_unused_graphics()
+    verify_no_unused_graphics()
 
-    print(
-        f"Generated {len(list(OUTPUT.rglob('*.png')))} active Japanese menu graphics "
-        f"and moved {unused_count} unused graphics to {UNUSED}"
-    )
+    print(f"Generated {len(list(OUTPUT.rglob('*.png')))} active Japanese menu graphics")
 
 
 if __name__ == "__main__":

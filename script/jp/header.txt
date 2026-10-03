@@ -14,9 +14,9 @@ stralias msgwnd3,":a;graphics\system\wnd\msgwnd3.png"
 stralias msgwnd4,":a;graphics\system\wnd\msgwnd4.png"
 numalias text_main_size,60
 numalias text_main_spacing,66
-numalias text_name_size,50
+numalias text_name_size,54
 numalias text_name_spacing,55
-numalias text_main_pad_t,-20
+numalias text_main_pad_t,-18
 numalias text_main_pad_r,87
 numalias text_main_pad_b,-41
 numalias text_main_pad_l,87

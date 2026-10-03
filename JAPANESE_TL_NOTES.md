@@ -355,6 +355,35 @@ shared highlight commands.
    selected cells side by side, so inspecting only the first state can miss
    alignment or clipping errors.
 
+## Script layout differences from English
+
+This section records deliberate presentation differences between the generated
+Japanese script and the English script. Translated wording, Japanese asset
+paths, dialogue furigana, and differences caused only by ordinary text wrapping
+are outside its scope. Navigation and unlock logic are also outside its scope
+unless they remove a visible control.
+
+| Area | Japanese layout difference | Implementation |
+| --- | --- | --- |
+| Main dialogue | Japanese dialogue uses a 60 px main font with 66 px line spacing, compared with English's 50/55. The main text top and bottom padding are `-20` and `-41` instead of `-10` and `-40`. Name text keeps the English 50/55 size and spacing, but uses top/bottom padding `25/-60` instead of `30/-65`. Left and right padding are unchanged. | Numeric aliases at the start of `script/jp/header.txt`; the shared window routines consume them. |
+| Save/load captions | Episode and chapter captions use font 2 at 36 px, 36 px line height, and a 1350 px wrap limit. English inherits the shared 45 px preset with 40 px line height and a 1920 px limit. The smaller Japanese preset lets two-line captions remain below the slot number inside the 180 px save box. | Japanese override of preset 30 in `script/jp/code.txt`. |
+| Settings choices | The normal settings screen gives the wider Japanese choices explicit centered, fitted columns while preserving the shared button positions: On/Off `110`, Windowed `330`, Fullscreen `320`, Auto `150`, Keyboard + Mouse `375`, and DualShock `300` px. English renders these choices at their natural width. | `$settingChoiceColumns` in `update-manager/generate-jp-menu.php`, emitted into `script/jp/menu.txt`. |
+| Initial Game Configuration | The Japanese display-mode choices use centered fitted boxes at `(x,width)` values `(850,300)`, `(1160,360)`, and `(1550,220)`. Keyboard + Mouse and DualShock use `(900,430)` and `(1380,300)`. The language and window-size values use the existing 350 px value column. The Apply label is placed around visual center `x=927` and shifted left by half its measured sprite width. | The `%game_language = 7` branches in `script/umi_ftr.txt`. These branches affect only the initial configuration screen, which is shown before a locale script has been selected. |
+| New-trophy notice | The Japanese notification is fitted and centered in an 846 px box; English uses an unbounded text sprite. | `trophy_text_new` in `update-manager/generate-jp-menu.php`. |
+| Tips list furigana | Ruby is removed from each Tips list-row title because it changes the row's measured height and breaks the list window. The reading is retained in parentheses at the start of the description. List titles otherwise retain the English preset 13, fit mode, and 700 px width. | Extraction in `update-manager/extract-jp-menu-text.py`, then alias generation in `update-manager/generate-jp-menu.php`. |
+| Bern rules | Rules use Japanese preset 34: font 1 at 55 px, 55 px line height, 8 px border, and 1590 px wrap width. A 3 px preset 35 spacer is inserted between the eleven displayed rule lines because this sprite renderer ignores the requested line advance. English uses preset 32 without spacer rows. | Presets in `script/jp/code.txt`; rule assembly in `update-manager/generate-jp-menu.php`. |
+| Bern hint titles | All hint titles, including the locked placeholder, use preset 36: font 2 at 50 px with a 10 px border, 3 px character spacing, 50 px line height, and 1500 px wrap width. English uses preset 32. | `script/jp/code.txt` and the generated `ep8_9_hint_*` aliases. |
+| Bern hint scrolling | The row pitch remains the shared 60 px. Japanese changes the text top margin from 10 px to 0 and adds 15 px of bottom scroll clearance; English keeps a 10 px top margin and no bottom margin. This aligns hover hitboxes with the Japanese glyphs and lets the last outlined row scroll fully into view. | Japanese-only `scrollable_cfg` override in `script/umi_ftr.txt`. |
+| Bern chapter/person passages | In chapter views, the speaker name occupies its own line and the statement follows immediately below it. Blank lines separate speaker/statement blocks. In person views, a night heading remains directly above its first statement, while later statements and later night sections are separated by blank lines. English generally keeps the speaker inline and uses its own source line breaks. | `storyEntry()`, `storySection()`, and the `{n}{n}` joins in `update-manager/generate-jp-menu.php`. |
+| Bern red statements | Each red fact is a separate block with a blank line between blocks. The interior-lock clarification beginning `もちろん、部屋の内側からは…` is also split into its own red statement, as shown in the PS3 capture. | Red-statement assembly in `update-manager/generate-jp-menu.php`. |
+| Grimoire controls | The Japanese build removes the visible Grimoire switch and its hitbox. Episode 8 Tips still opens the shared destination, whose caption, rows, and body sprites are valid blank stubs. This preserves the shared page layout without showing untranslated Grimoire content. | `hideJapaneseGrimoireButtons()` in `update-manager/update-manager.php` and generated blank Grimoire aliases in `script/jp/menu.txt`. |
+| Song-subtitle controls | Opening/ending soft-subtitle settings, their button registrations, subtitle list, and subtitle verification UI are removed from the Japanese build. They are unnecessary when Japanese voice and text are used together and would otherwise leave English-only controls in the settings layout. | `removeJapaneseSoftSubtitles()` in `update-manager/update-manager.php`. |
+
+The Bern chapter selector widths (`645` for the night headings and `700` for
+topic rows), culprit prompt/button coordinates (`160/883`), and main puzzle
+button positions currently match English and are therefore not Japanese layout
+differences.
+
 ## Text
 
 ### Reused official Japanese text

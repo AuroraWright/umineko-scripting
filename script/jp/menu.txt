@@ -279,10 +279,10 @@ stralias tips_8_3_1,":s;#FFFFFF`{p:5:ep8}"
 stralias use_magic1,":s;#FFFFFF`{p:15:魔法を使い、時間を先へ進めることができます。}"
 stralias use_magic2,":s;#C7C7C7#FFFFFF`{p:15:魔法を使う}"
 stralias use_magic3,":s;#C7C7C7#FFFFFF`{p:15:魔法を使わない}"
-stralias show_dream1,":s;#FFFFFF`{p:15:黄金の夢を思い出しますか？}"
-stralias show_dream2,":s;#C7C7C7#FFFFFF`{p:15:はい}"
-stralias show_dream3,":s;#C7C7C7#FFFFFF`{p:15:あとで}"
-stralias show_dream4,":s;#C7C7C7#FFFFFF`{p:15:疑わずに戦う}"
+stralias show_dream1,":s;#FFFFFF`{p:15: }"
+stralias show_dream2,":s;#C7C7C7#FFFFFF`{p:15: }"
+stralias show_dream3,":s;#C7C7C7#FFFFFF`{p:15: }"
+stralias show_dream4,":s;#C7C7C7#FFFFFF`{p:15: }"
 stralias work_in_progress,":s;#FFFFFF`{p:8:このエピソード／チャプターは開発中です！}"
 stralias work_in_progress_ok,":s;#FFFFFF`{p:8:OK}"
 stralias date_scenario_episode,"エピソード"
@@ -649,7 +649,7 @@ stralias chapter_screen_all_ep6,":c/19,0,3,1;graphics\menu\jump\EP6.png"
 stralias chapter_screen_all_ep7,":c/19,0,3,1;graphics\menu\jump\EP7.png"
 stralias chapter_screen_all_ep8,":c/17,0,3,1;graphics\menu\jump\EP8.png"
 ;scenario menu
-stralias rmenu_btn_Exit_text,":s;#C7C7C7#FF0000`{p:11:メインメニューへ戻る}"
+stralias rmenu_btn_Exit_text,":s;#C7C7C7#FF0000`{p:11:タイトル画面へ戻る}"
 ;Save load menu
 ;ep1
 stralias save_1_op,":s;#FFFFFF`{p:30:Episode 1 Legend of the golden witch.{n}オープニング}`"
@@ -826,7 +826,7 @@ stralias save_8_ura,":s;#FFFFFF`{p:30:Episode 8 Twilight of the golden witch.{n}
 
 ;buttons
 ;session
-stralias sess_real_world,"現実の時刻"
+stralias sess_real_world,"現在日時"
 stralias sess_total_clicks,"総クリック数"
 stralias sess_total_time,"総プレイ時間"
 stralias sess_current_track,"再生中の曲"
@@ -1373,7 +1373,7 @@ stralias set_rumble_strength,":s;#FFFFFF`{p:8:振動の強さ}"
 stralias set_text_speed,":s;#FFFFFF`{p:8:メッセージ表示速度}"
 stralias set_automode_speed,":s;#FFFFFF`{p:8:オートモード速度}"
 stralias set_textbox_window,":s;#FFFFFF`{p:8:ウィンドウタイプ}"
-stralias set_alchemist_wording_edits,":s;#FFFFFF`{p:8:アルケミスト版表現}"
+stralias set_alchemist_wording_edits,":s;#FFFFFF`{p:8: }"
 stralias set_lip_synchronization,":s;#FFFFFF`{p:8:リップシンク}"
 stralias set_bgm_chapter_display,":s;#FFFFFF`{p:8:BGM／チャプター表示}"
 stralias set_back,":s;#FFFFFF#FF0000`{p:11:戻る}"
@@ -1383,10 +1383,10 @@ stralias set_next_s,":s;#FF0000`{p:11:次へ}"
 stralias set_exit,":s;#FFFFFF#FF0000`{p:11:終了}"
 stralias log_prev,":s;#FFFFFF#FF0000`{p:11:前のチャプター}"
 stralias log_next,":s;#FFFFFF#FF0000`{p:11:次のチャプター}"
-stralias log_hint_text,":s;#FFFFFF`{p:11:台詞の音声を再生するには、1本指でタップ、左クリック、またはEnterキーを押してください。{n}ゲーム内の台詞へ移動するには、3本指でタップ、中クリック、またはZキーを押してください。{n}履歴をすばやくスクロールするには、Page Up／Page Downキーを使用してください。}`"
+stralias log_hint_text,":s;#FFFFFF`{p:11:台詞の音声を再生するには、1本指でタップするか、左クリックするか、Enterキーを押してください。{n}この台詞の場面へ移動するには、3本指でタップするか、中クリックするか、Zキーを押してください。{n}履歴をすばやくスクロールするには、Page Up／Page Downキーを使用してください。}`"
 stralias tips_hint_text,":s;#FFFFFF`{p:11:文章の横に矢印がある場合は、マウスホイールまたは2本指のスワイプでスクロールできます。}`"
 stralias reset_hint_text,":s;#FFFFFF`{p:11:ゲームをリセットしますか？{n}トロフィーを含むすべてのセーブデータが削除されます。}"
-stralias jump_hint_text,":s;#FFFFFF`{p:11:この台詞へ移動しますか？{n}時間がかかる場合があります。先にセーブすることをおすすめします。}"
+stralias jump_hint_text,":s;#FFFFFF`{p:11:この台詞の場面へ移動しますか？{n}時間がかかる場合があります。先にセーブすることをおすすめします。}"
 stralias action_yes,":s;#C7C7C7#FFFFFF`{p:11:はい}"
 stralias action_no,":s;#C7C7C7#FFFFFF`{p:11:いいえ}"
 
@@ -1416,7 +1416,7 @@ stralias r_click_chapters_1_14,":a;graphics\menu_jp\r_click_menu\chapters\1_14.p
 stralias r_click_chapters_1_15,":a;graphics\menu_jp\r_click_menu\chapters\1_15.png"
 stralias r_click_chapters_1_16,":a;graphics\menu_jp\r_click_menu\chapters\1_16.png"
 stralias r_click_chapters_1_17,":a;graphics\menu_jp\r_click_menu\chapters\1_17.png"
-stralias r_click_chapters_1_omake,":a;graphics\menu_jp\r_click_menu\chapters\1_omake.png"
+stralias r_click_chapters_1_omake,":a;graphics\menu_jp\empty.png"
 stralias r_click_chapters_1_op,":a;graphics\menu_jp\r_click_menu\chapters\1_op.png"
 stralias r_click_chapters_1_tea,":a;graphics\menu_jp\r_click_menu\chapters\1_tea.png"
 stralias r_click_chapters_1_ura,":a;graphics\menu_jp\r_click_menu\chapters\1_ura.png"
@@ -1749,8 +1749,8 @@ stralias ep8_9_page_6_2_t,":s;#FFFFFF`{p:3:戦人{n}「俺たちは３人でず�
 
 ; trophies
 
-stralias trophy_text_locked,"{p:18:トロフィーはロックされています}"
-stralias trophy_text_new,":s;#FFFFFF`{p:11:{w:846:}{a:c:}{fit}トロフィーメニューに新しいトロフィーが追加されました！}`"
+stralias trophy_text_locked,"{p:18:未獲得のトロフィーです。}"
+stralias trophy_text_new,":s;#FFFFFF`{p:11:{w:846:}{a:c:}{fit}トロフィーを獲得しました！}`"
 numalias trophy_text_x,537
 numalias trophy_text_y,680
 

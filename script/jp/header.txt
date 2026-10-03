@@ -13,10 +13,10 @@ stralias msgwnd2,":a;graphics\system\wnd\msgwnd2.png"
 stralias msgwnd3,":a;graphics\system\wnd\msgwnd3.png"
 stralias msgwnd4,":a;graphics\system\wnd\msgwnd4.png"
 numalias text_main_size,60
-numalias text_main_spacing,66
+numalias text_main_spacing,70
 numalias text_name_size,54
 numalias text_name_spacing,55
-numalias text_main_pad_t,-18
+numalias text_main_pad_t,-20
 numalias text_main_pad_r,87
 numalias text_main_pad_b,-41
 numalias text_main_pad_l,87
@@ -294,7 +294,7 @@ stralias verify_graphics,"'graphics' フォルダーが正しく展開されて�
 stralias verify_sound,"'sound' フォルダーが正しく展開されているか確認してください。一部のファイルにアクセスできません。"
 stralias verify_sprites,"'sprites' フォルダーが正しく展開されているか確認してください。一部のファイルにアクセスできません。"
 stralias verify_video,"'video' フォルダーが正しく展開されているか確認してください。一部のファイルにアクセスできません。"
-stralias verify_updates,"最新のファイル更新がすべてインストールされているか確認してください。一部のファイルにアクセスできません。"
+stralias verify_updates,"最新の更新データがすべて適用されているか確認してください。一部のファイルにアクセスできません。"
 stralias verify_engine,"最新のゲームスクリプトとエンジンを使用してください。現在のエンジンとスクリプトには互換性がありません。"
 
 stralias verification_title,"ゲームファイルの検証"
@@ -305,10 +305,10 @@ stralias verification_missing," 不足しているファイル"
 stralias verification_good,"問題ありません！{n}"
 stralias verification_bad,"ゲームファイルの検証に失敗しました！{n}"
 stralias verification_nohash,"ゲームディレクトリに game.hash がありません！{n}"
-stralias verification_unsupported,"ゲームディレクトリに未対応の game.hash があります！{n}"
+stralias verification_unsupported,"ゲームディレクトリ内の game.hash は対応していない形式です。{n}"
 stralias verification_outdated,"ゲームディレクトリの game.hash が古くなっています！{n}"
 stralias verification_end,"右クリックで終了！"
 
-stralias verification_ancient,"ゲームファイルが6か月以上古いため、更新が必要な可能性があります！"
+stralias verification_ancient,""
 
 ;--System-text-end--

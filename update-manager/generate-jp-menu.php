@@ -156,8 +156,8 @@ $trophies += [
 if (count($trophies) !== 75) {
 	throw new RuntimeException('Expected exactly 75 official PS3 trophies');
 }
-$aliases['trophy_text_locked'] = '{p:18:トロフィーはロックされています}';
-$aliases['trophy_text_new'] = ':s;#FFFFFF`{p:11:{w:846:}{a:c:}{fit}トロフィーメニューに新しいトロフィーが追加されました！}`';
+$aliases['trophy_text_locked'] = '{p:18:未獲得のトロフィーです。}';
+$aliases['trophy_text_new'] = ':s;#FFFFFF`{p:11:{w:846:}{a:c:}{fit}トロフィーを獲得しました！}`';
 foreach ($trophies as $id => [$rank, $title, $description]) {
 	$aliases['trophy_text_' . $id] = "{p:18:{$rank}トロフィー{n}$title{n}$description}";
 }
@@ -284,13 +284,15 @@ $aliases += [
 	'use_magic1' => ':s;#FFFFFF`{p:15:魔法を使い、時間を先へ進めることができます。}',
 	'use_magic2' => ':s;#C7C7C7#FFFFFF`{p:15:魔法を使う}',
 	'use_magic3' => ':s;#C7C7C7#FFFFFF`{p:15:魔法を使わない}',
-	'show_dream1' => ':s;#FFFFFF`{p:15:黄金の夢を思い出しますか？}',
-	'show_dream2' => ':s;#C7C7C7#FFFFFF`{p:15:はい}',
-	'show_dream3' => ':s;#C7C7C7#FFFFFF`{p:15:あとで}',
-	'show_dream4' => ':s;#C7C7C7#FFFFFF`{p:15:疑わずに戦う}',
+	// Omake 3 is unreachable in Japanese. Preserve valid one/two-cell text
+	// sprites in case the shared script is entered unexpectedly.
+	'show_dream1' => ':s;#FFFFFF`{p:15: }',
+	'show_dream2' => ':s;#C7C7C7#FFFFFF`{p:15: }',
+	'show_dream3' => ':s;#C7C7C7#FFFFFF`{p:15: }',
+	'show_dream4' => ':s;#C7C7C7#FFFFFF`{p:15: }',
 	'work_in_progress' => ':s;#FFFFFF`{p:8:このエピソード／チャプターは開発中です！}',
-	'rmenu_btn_Exit_text' => ':s;#C7C7C7#FF0000`{p:11:メインメニューへ戻る}',
-	'sess_real_world' => '現実の時刻',
+	'rmenu_btn_Exit_text' => ':s;#C7C7C7#FF0000`{p:11:タイトル画面へ戻る}',
+	'sess_real_world' => '現在日時',
 	'sess_total_clicks' => '総クリック数',
 	'sess_total_time' => '総プレイ時間',
 	'sess_current_track' => '再生中の曲',
@@ -318,7 +320,8 @@ $settingLabels = [
 	'set_effect_volume' => ['Effect volume', '効果音 音量'], 'set_voice_volume' => ['Voice volume', '音声 音量'],
 	'set_rumble_strength' => ['Rumble strength', '振動の強さ'], 'set_text_speed' => ['Text speed', 'メッセージ表示速度'],
 	'set_automode_speed' => ['Automode speed', 'オートモード速度'], 'set_textbox_window' => ['Textbox window', 'ウィンドウタイプ'],
-	'set_alchemist_wording_edits' => ['Alchemist wording edits', 'アルケミスト版表現'],
+	// Its only shared-script load is commented out.
+	'set_alchemist_wording_edits' => ['Alchemist wording edits', ' '],
 	'set_lip_synchronization' => ['Lip synchronization', 'リップシンク'],
 	'set_bgm_chapter_display' => ['BGM/Chapter display', 'BGM／チャプター表示'],
 	'set_back' => ['Back', '戻る'], 'set_back_s' => ['Back', '戻る'], 'set_next' => ['Next', '次へ'], 'set_next_s' => ['Next', '次へ'],
@@ -336,7 +339,7 @@ $portUiLabels = [
 	'log_next' => ['Next chapter', '次のチャプター'],
 	'log_hint_text' => [
 		"To listen to the line's voice, tap on it with one finger, left-click, or press Enter.{n}To jump to a line in-game, tap on it with three fingers, middle-click, or press Z.{n}To quickly scroll the lines, use Page Up/Page Down.",
-		'台詞の音声を再生するには、1本指でタップ、左クリック、またはEnterキーを押してください。{n}ゲーム内の台詞へ移動するには、3本指でタップ、中クリック、またはZキーを押してください。{n}履歴をすばやくスクロールするには、Page Up／Page Downキーを使用してください。',
+		'台詞の音声を再生するには、1本指でタップするか、左クリックするか、Enterキーを押してください。{n}この台詞の場面へ移動するには、3本指でタップするか、中クリックするか、Zキーを押してください。{n}履歴をすばやくスクロールするには、Page Up／Page Downキーを使用してください。',
 	],
 	'tips_hint_text' => [
 		'If there are arrows next to the text, you can scroll it using the mouse wheel or two-finger swipe gesture.',
@@ -348,7 +351,7 @@ $portUiLabels = [
 	],
 	'jump_hint_text' => [
 		'Would you like to jump to this line?{n}This might take time, and you may wish to save first.',
-		'この台詞へ移動しますか？{n}時間がかかる場合があります。先にセーブすることをおすすめします。',
+		'この台詞の場面へ移動しますか？{n}時間がかかる場合があります。先にセーブすることをおすすめします。',
 	],
 	'action_yes' => ['Yes', 'はい'],
 	'action_no' => ['No', 'いいえ'],
@@ -734,6 +737,19 @@ foreach ($deadAliases as $name) {
 	if ($menu === null || $count > 1) {
 		throw new RuntimeException("Unable to remove dead alias $name");
 	}
+}
+
+// Episode 1 Omake is not exposed by the Japanese title flow. Keep the alias
+// expected by the shared script, but avoid shipping a generated chapter card.
+$menu = preg_replace(
+	'/^stralias r_click_chapters_1_omake,.*$/m',
+	'stralias r_click_chapters_1_omake,":a;graphics\\menu_jp\\empty.png"',
+	$menu,
+	1,
+	$count
+);
+if ($menu === null || $count !== 1) {
+	throw new RuntimeException('Unable to stub Japanese Episode 1 Omake chapter card');
 }
 
 // Retain aliases required by the shared page, but stub its translation notes.

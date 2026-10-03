@@ -131,12 +131,12 @@ def generate_port_title_panels() -> None:
             (
                 "このエピソードのロックを解除します。",
                 "",
-                "エピソードを順番通りに進めなかった場合、",
-                "物語がわからなくなり、興味を失うおそれがあります。",
+                "エピソードを順番通りにお読みにならないと、",
+                "物語の理解や楽しみを損なうおそれがあります。",
                 "",
                 "この機能は、それまでのエピソードを",
-                "プレイ済みの方のみご利用になることを",
-                "強くお勧めします。",
+                "すでにプレイされた方のみ",
+                "ご利用下さいますよう、強くお勧めします。",
             ),
             "white",
         ),
@@ -345,8 +345,9 @@ def generate_chapter_cards() -> None:
         write_chapter_card(directory / f"{episode}_op.png", font, [f"Episode {episode}", sections[0]])
         write_chapter_card(directory / f"{episode}_tea.png", font, [f"Episode {episode}", "Tea party"])
         write_chapter_card(directory / f"{episode}_ura.png", font, [f"Episode {episode}", "????"])
-    write_chapter_card(directory / "1_omake.png", font, ["おまけ1"])
-    for episode in range(2, 9):
+    # Japanese exposes only the restored Episode 2 Omake from the title flow.
+    # The inaccessible Episode 1 chapter-card alias uses the shared empty stub.
+    for episode in range(1, 9):
         (directory / f"{episode}_omake.png").unlink(missing_ok=True)
 
 

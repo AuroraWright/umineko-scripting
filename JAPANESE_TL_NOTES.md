@@ -118,7 +118,7 @@ The following are reused project assets and contain no newly generated data:
 
 | Output | Existing source and status |
 | --- | --- |
-| `graphics_jp/menu_jp/empty.png` | Copy of the shared one-pixel transparent stub used for the hidden Grimoire button and caption. |
+| `graphics_jp/menu_jp/empty.png` | Copy of the shared one-pixel transparent stub used for the hidden Grimoire button and caption and the inaccessible Episode 1 Omake chapter-card alias. |
 | `graphics_jp/menu_jp/config/{config_left,config_right}.png` | Existing language-neutral port arrows. |
 | `graphics_jp/menu_jp/quiz/quizbtn[1-6].png` | Existing port answer-letter buttons, loaded through a dynamic filename prefix and reused without localization. |
 
@@ -214,12 +214,12 @@ official conversions.
 
 #### Chapter cards
 
-`graphics_jp/menu_jp/r_click_menu/chapters/*.png` contains 164 newly rendered port
+`graphics_jp/menu_jp/r_click_menu/chapters/*.png` contains 163 newly rendered port
 cards. The 139 numbered chapter titles and dates, and the official labels
 `オープニング`, `Tea party`, and `????`, come from the `SECTION_START` and
 `CHAPTER` records in `snr/output/script_rondo.xml` and
 `snr/output/script_chiru.xml`. `Episode N` follows the terminology visible in
-the PS3 title atlases. `おまけ1` is a project label.
+the PS3 title atlases.
 
 The renderer decodes the original PS3 `default.fnt` through
 `update-manager/ps3_font.py`, retaining its glyph masks and advance widths.
@@ -316,9 +316,11 @@ PS3 archive has no separate hover layer.
 
 ### Omitted graphics
 
-The Japanese locale intentionally omits `SystemBtn/grimoire_btn.png` and
-`notes/notes_caption.png`, and stubs their aliases with `empty.png`. The unused
-`on.png`, `on_1.png`, `off.png`, and `off_1.png` are also omitted.
+The Japanese locale intentionally omits `SystemBtn/grimoire_btn.png`,
+`notes/notes_caption.png`, and `r_click_menu/chapters/1_omake.png`, and stubs
+their aliases with `empty.png`. The Episode 1 Omake chapter route is unused and
+inaccessible in Japanese. The unused `on.png`, `on_1.png`, `off.png`, and
+`off_1.png` are also omitted.
 
 `graphics_jp/locale_jp/{circle_logo_ga,circle_logo_ga_2}.png` are omitted because
 the Golden Abyss credit cards are selected only by the Russian locale.
@@ -365,8 +367,8 @@ unless they remove a visible control.
 
 | Area | Japanese layout difference | Implementation |
 | --- | --- | --- |
-| Main dialogue | Japanese dialogue uses a 60 px main font with 66 px line spacing, compared with English's 50/55. The main text top and bottom padding are `-18` and `-41` instead of `-10` and `-40`. Name text uses a 54 px font with 55 px line spacing instead of English's 50/55, and top/bottom padding `25/-60` instead of `30/-65`. Left and right padding are unchanged. | Numeric aliases in the new `script/jp/header.txt`; the shared window routines consume them. The same header selects the Japanese Rondo/Chiru window art, locale graphics, captions, and language mode without changing the shared script logic. |
-| Save/load captions | Episode and chapter captions use font 2 at 36 px, 36 px line height, and a 1350 px wrap limit. English inherits the shared 45 px preset with 40 px line height and a 1920 px limit. The smaller Japanese preset lets two-line captions remain below the slot number inside the 180 px save box. | Japanese override of preset 30 in `script/jp/code.txt`. |
+| Main dialogue | Japanese dialogue uses a 60 px main font with 70 px line spacing, compared with English's 50/55. The main text top and bottom padding are `-20` and `-41` instead of `-10` and `-40`. Name text uses a 54 px font with 55 px line spacing instead of English's 50/55, and top/bottom padding `25/-60` instead of `30/-65`. Left and right padding are unchanged. | Numeric aliases in the new `script/jp/header.txt`; the shared window routines consume them. The same header selects the Japanese Rondo/Chiru window art, locale graphics, captions, and language mode without changing the shared script logic. |
+| Save/load captions | Episode and chapter captions use font 2 at 34 px with 34 px line height and a 1350 px wrap limit. English inherits the shared 45 px preset with 40 px line height and a 1920 px limit. The smaller Japanese preset lets two-line captions remain below the slot number inside the 180 px save box. | Japanese override of preset 30 in `script/jp/code.txt`. |
 | Settings choices | The normal settings screen gives the wider Japanese choices explicit centered, fitted columns while preserving the shared button positions: On/Off `110`, Windowed `330`, Fullscreen `320`, Auto `150`, Keyboard + Mouse `375`, and DualShock `300` px. English renders these choices at their natural width. | `$settingChoiceColumns` in `update-manager/generate-jp-menu.php`, emitted into `script/jp/menu.txt`. |
 | Initial Game Configuration | The Japanese display-mode choices use centered fitted boxes at `(x,width)` values `(850,300)`, `(1160,360)`, and `(1550,220)`. Keyboard + Mouse and DualShock use `(900,430)` and `(1380,300)`. The language and window-size values use the existing 350 px value column. The Apply label is placed around visual center `x=927` and shifted left by half its measured sprite width. | The `%game_language = 7` branches in `script/umi_ftr.txt`. These branches affect only the initial configuration screen, which is shown before a locale script has been selected. |
 | New-trophy notice | The Japanese notification is fitted and centered in an 846 px box; English uses an unbounded text sprite. | `trophy_text_new` in `update-manager/generate-jp-menu.php`. |
@@ -412,19 +414,24 @@ title was extracted from the PS3 release.
 The following Japanese has no exact official PS3 source and was written or
 translated for this port:
 
+`JAPANESE_TEXT_REVIEW.md` consolidates the exact reviewable strings, their UI
+context, and intended English meaning for native-speaker review.
+
 | Text group | Location and rationale |
 | --- | --- |
-| Port settings and initial configuration | `script/jp/menu.txt`, `script/jp/code.txt`, `script/jp/header.txt`, and the generated Config artwork. These translate PC-port controls such as game language, renderer, window size, object caching, interface mode, textbox style, BGM title language, Alchemist wording edits, and lip sync. Official PS3 terminology is followed where an equivalent exists; port-only choices are project translations. |
+| Port settings and initial configuration | `script/jp/menu.txt`, `script/jp/code.txt`, `script/jp/header.txt`, and the generated Config artwork. These translate PC-port controls such as game language, renderer, window size, object caching, interface mode, textbox style, BGM title language, and lip sync. Official PS3 terminology is followed where an equivalent exists; port-only choices are project translations. |
 | Port interaction hints | `script/jp/menu.txt`. Backlog voice/jump instructions, Tips scrolling, reset confirmation, line-jump warning, save/load buttons, and related Yes/No actions describe mouse, keyboard, and touch behavior absent from the PS3 UI. |
 | Port status and navigation | `script/jp/menu.txt` and `script/jp/caches.txt`. Session statistics, previous/next chapter, return to main menu, work-in-progress and restart-required notices, the startup cache message, and similar labels are project translations. |
 | Port-only title prose and confirmation prompts | Baked into the generated title panels and SystemBtn images described above. The source is the English port UI, with Japanese wording adapted to the tone of the official PS3 title prose. |
 | Trophy caption and notifications | `トロフィー`, the locked message, and the new-trophy notification are project UI translations. The individual trophy records remain official. |
 | Three Episode 8 placeholder Tips | `r_tips_8_1` through `r_tips_8_3` in `script/jp/menu.txt`. These port placeholders have no official PS3 Tips records and retain identifiers `81`, `82`, and `83`. |
-| `おまけ1` chapter-card label | Generated chapter card. This is a port label rather than extracted chapter metadata. |
 | General locale glue | Remaining visible Japanese in `script/jp/{header,code,credits,menu,prefs,caches}.txt` that is not explicitly identified in the official table above should be treated as project localization or port integration text. This includes messages for behaviors implemented only by the PC port. |
 
 The Grimoire title and body aliases intentionally contain blank text sprites.
-These are compatibility stubs, not translations. `story/omake/jp/umio1.txt`
+The unused `set_alchemist_wording_edits` alias and the inaccessible Omake 3
+`show_dream1` through `show_dream4` aliases are blank text sprites as well.
+The unused release-age warning `verification_ancient` in `script/jp/header.txt`
+is an empty string alias. These are compatibility stubs, not translations. `story/omake/jp/umio1.txt`
 and `umio3.txt` through `umio9.txt` are empty filename-preserving overlays; an
 empty overlay leaves the shared base script unchanged. The Japanese title flow
 only exposes the restored Episode 2 Omake after Episode 2 is cleared, and does

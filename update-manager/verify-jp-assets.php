@@ -51,7 +51,8 @@ for ($episode = 2; $episode <= 8; $episode++) {
 }
 
 $assetCount = 0;
-// Both hidden Grimoire image loads rely on this transparent 1px PNG.
+// Hidden Grimoire loads and the inaccessible Episode 1 Omake chapter card
+// rely on this transparent 1px PNG.
 if (!is_file($root . '/graphics_jp/menu_jp/empty.png') ||
 	hash_file('sha256', $root . '/graphics_jp/menu_jp/empty.png') !==
 	'11b9c95a68e295dddd0ea924647536578ce285b2c8469a223c01df1ff3166af1') {
@@ -74,7 +75,7 @@ foreach ($localeFiles as $file) {
 	$japaneseAssets = assetLines($japanesePath);
 	$expectedAssets = array_map(
 		static function (string $line): string {
-			if (in_array(assetAliasName($line), ['r_grim', 'grim_caption'], true)) {
+			if (in_array(assetAliasName($line), ['r_grim', 'grim_caption', 'r_click_chapters_1_omake'], true)) {
 				return 'stralias ' . assetAliasName($line) . ',":a;graphics\\menu_jp\\empty.png"';
 			}
 			$line = str_replace(
@@ -411,7 +412,7 @@ $japanesePortUiText = [
 	'log_hint_text' => '台詞の音声を再生するには',
 	'tips_hint_text' => '文章の横に矢印がある場合は',
 	'reset_hint_text' => 'ゲームをリセットしますか？',
-	'jump_hint_text' => 'この台詞へ移動しますか？',
+	'jump_hint_text' => 'この台詞の場面へ移動しますか？',
 	'action_yes' => 'はい',
 	'action_no' => 'いいえ',
 	'save_btn' => 'セーブ',
@@ -530,7 +531,7 @@ foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($activeRoo
 }
 ksort($menuReferences);
 ksort($activeFiles);
-if ($activeFiles !== $menuReferences || count($activeFiles) !== 298) {
+if ($activeFiles !== $menuReferences || count($activeFiles) !== 297) {
 	throw new RuntimeException('Active Japanese menu graphics do not match script references');
 }
 $emptyDirectories = [];
@@ -571,7 +572,7 @@ $generatedGraphicHashes = [
 	'title/chiru/title1_text_ep1_4.png' => '82012599ef402f3ceb93d29f0a36e7784777cf8cbf0ffe29a49acfad293717e6',
 	'title/title1_text_ep5_8.png' => '5f13bfe7a705cfc9f9a16b41c85358f0d50edd828afcb4261b45cd1483fb536a',
 	'title/title1_text_exit.png' => 'f42fad061a2aff475659367b0ee5969d6108bfb59946a84106bfa6e0a72a16da',
-	'title/title1_text_unlock.png' => 'd08c64c70ead4f2810729fa90bb6352654b51b99c99ca808db68fe5c700e7407',
+	'title/title1_text_unlock.png' => 'afdbab43821f4bfdd523344d1a55509ccdce3c2da851f62c787531fac010356f',
 	'title/title1_text_warning.png' => '52cdab4b2f99c81b906ddf566a5571bcb166765fc172e6e100ad29c57ea7e54d',
 	'title/title1_text_web.png' => 'a9a3ebe979056de5e5c1fee89f44a8084399ed54d3298c742b3c8fc989363540',
 	'title_menu/unlock_kaku_bg.png' => '4073a12236e28ad8d9636c008a32155e8c4a60df1a926d12dbf70d7750b4af26',
@@ -603,4 +604,4 @@ foreach ($messageWindowHashes as $filename => $expectedHash) {
 	}
 }
 
-echo "Verified $assetCount Japanese asset references, 14 direct PS3 memory screens, two PS3 message windows, 298 active menu graphics, localized port controls, no empty menu directories, no soft subtitles, 75 trophies, credits, and hidden Grimoire navigation" . PHP_EOL;
+echo "Verified $assetCount Japanese asset references, 14 direct PS3 memory screens, two PS3 message windows, 297 active menu graphics, localized port controls, no empty menu directories, no soft subtitles, 75 trophies, credits, and hidden Grimoire navigation" . PHP_EOL;

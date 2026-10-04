@@ -33200,8 +33200,8 @@ if %game_language != 6 jumpf
 if %game_language != 7 jumpf
 	notif  %full_window_auto = 1 lsp 279,":s;#C7C7C7#FFFFFF`{p:8:{w:300:}{a:c:}{fit}ウィンドウ}",850,%y+200
 	if %full_window_auto = 1 lsp 279,":s;#FFFFFF`{p:8:{w:300:}{a:c:}{fit}ウィンドウ}",850,%y+200
-	notif  %full_window_auto = 2 lsp 280,":s;#C7C7C7#FFFFFF`{p:8:{w:360:}{a:c:}{fit}フルスクリーン}",1160,%y+200
-	if %full_window_auto = 2 lsp 280,":s;#FFFFFF`{p:8:{w:360:}{a:c:}{fit}フルスクリーン}",1160,%y+200
+	notif  %full_window_auto = 2 lsp 280,":s;#C7C7C7#FFFFFF`{p:8:{w:360:}{a:c:}{fit}フルスクリーン}",1190,%y+200
+	if %full_window_auto = 2 lsp 280,":s;#FFFFFF`{p:8:{w:360:}{a:c:}{fit}フルスクリーン}",1190,%y+200
 	notif  %full_window_auto = 0 lsp 281,":s;#C7C7C7#FFFFFF`{p:8:{w:220:}{a:c:}{fit}自動}",1550,%y+200
 	if %full_window_auto = 0 lsp 281,":s;#FFFFFF`{p:8:{w:220:}{a:c:}{fit}自動}",1550,%y+200
 ~

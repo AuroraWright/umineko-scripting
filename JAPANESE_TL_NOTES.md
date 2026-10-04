@@ -350,9 +350,17 @@ shared highlight commands.
    python3 update-manager/generate-jp-graphics.py
    python3 update-manager/generate-jp-caches.py
    python3 update-manager/generate-jp-menu-graphics.py
+   oxipng -r -o 2 --nx graphics_jp
    php update-manager/verify-jp-assets.php
    python3 update-manager/verify-jp-chapters.py
    ```
+
+   `--nx` keeps each PNG's original color type, bit depth, and interlacing so
+   engine-facing sprite formats remain unchanged while the image data is
+   recompressed losslessly. Run the optimizer before regenerating
+   `locale_game.hash`, whose entries record the final compressed file sizes.
+   The Japanese `dscript` build must also run after optimization because its
+   startup check embeds the final size of `locale_jp/end_4a.png`.
 
 5. Check every sprite state in-game. Atlas files often place normal and
    selected cells side by side, so inspecting only the first state can miss
@@ -372,7 +380,7 @@ unless they remove a visible control.
 | Save/load captions | Episode and chapter captions use font 2 at 34 px with 34 px line height and a 1350 px wrap limit. English inherits the shared 45 px preset with 40 px line height and a 1920 px limit. The smaller Japanese preset lets two-line captions remain below the slot number inside the 180 px save box. | Japanese override of preset 30 in `script/jp/code.txt`. |
 | File-verification results | The Japanese result text inherits the shared verification font. A trailing full-width blank after the introductory ellipsis accommodates that glyph's right overhang, while a final newline reserves enough sprite height for the bottom outline of the last line. The shared verification layout and scrolling logic are unchanged. | Formatting in the `verification_*` aliases in `script/jp/header.txt`. |
 | Settings choices | The normal settings screen gives the wider Japanese choices explicit centered, fitted columns while preserving the shared button positions: On/Off `110`, Windowed `330`, Fullscreen `320`, Auto `150`, Keyboard + Mouse `375`, and DualShock `300` px. English renders these choices at their natural width. | `$settingChoiceColumns` in `update-manager/generate-jp-menu.php`, emitted into `script/jp/menu.txt`. |
-| Initial Game Configuration | The Japanese display-mode choices use centered fitted boxes at `(x,width)` values `(850,300)`, `(1160,360)`, and `(1550,220)`. Keyboard + Mouse and DualShock use `(900,430)` and `(1380,300)`. The language and window-size values use the existing 350 px value column. The Apply label is placed around visual center `x=927` and shifted left by half its measured sprite width. | The `%game_language = 7` branches in `script/umi_ftr.txt`. These branches affect only the initial configuration screen, which is shown before a locale script has been selected. |
+| Initial Game Configuration | The Japanese display-mode choices use centered fitted boxes at `(x,width)` values `(850,300)`, `(1190,360)`, and `(1550,220)`. Keyboard + Mouse and DualShock use `(900,430)` and `(1380,300)`. The language and window-size values use the existing 350 px value column. The Apply label is placed around visual center `x=927` and shifted left by half its measured sprite width. | The `%game_language = 7` branches in `script/umi_ftr.txt`. These branches affect only the initial configuration screen, which is shown before a locale script has been selected. |
 | New-trophy notice | The Japanese notification is fitted and centered in an 846 px box; English uses an unbounded text sprite. | `trophy_text_new` in `update-manager/generate-jp-menu.php`. |
 | Tips list furigana | Ruby is removed from each Tips list-row title because it changes the row's measured height and breaks the list window. The reading is retained in parentheses at the start of the description. List titles otherwise retain the English preset 13, fit mode, and 700 px width. | Extraction in `update-manager/extract-jp-menu-text.py`, then alias generation in `update-manager/generate-jp-menu.php`. |
 | Bern rules | Rules use Japanese preset 34: font 1 at 55 px, 55 px line height, 8 px border, and 1590 px wrap width. A 3 px preset 35 spacer is inserted between the eleven displayed rule lines because this sprite renderer ignores the requested line advance. English uses preset 32 without spacer rows. | Presets in `script/jp/code.txt`; rule assembly in `update-manager/generate-jp-menu.php`. |

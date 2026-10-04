@@ -449,21 +449,23 @@ foreach (['goa' => range(1, 4), 'kakera' => range(1, 10)] as $prefix => $numbers
 	}
 }
 
+// Byte hashes below describe the final files after the documented
+// `oxipng -r -o 2 --nx graphics_jp` pass.
 $officialMemoryHashes = [
-	'goa_memory1.png' => 'c82daa06264383ea1d51a832a2acb004c5a194880174161bd3319d93f8e66a07',
-	'goa_memory2.png' => '16c177781c98a30db45a5801902fe324ebe37c340d70dde62bd60531e5d6c0b0',
-	'goa_memory3.png' => '84982ec702e89fb07fcab6389e4be970f18c3d2a6a7de2ed5793fd40f32f4c05',
-	'goa_memory4.png' => '83c3f53a27ff43b405857f83ba80d07686255715b3aab0168fac4c0da5584138',
-	'kakera/kakera_memory1.png' => 'a312437eaa8ce8f090bc8cc3cc7cce3924c121e89a75c6e2c662b362c8b66a33',
-	'kakera/kakera_memory2.png' => '732b3b02f1ef4d95406543d3bfeb6d3adf8173eb5eabf70820ee7c506884de11',
-	'kakera/kakera_memory3.png' => 'cf8916b89e31b3c4f2095a814f33fab48fd50ef48eeb043e9f4b857fa250202d',
-	'kakera/kakera_memory4.png' => '1731d44fc5726a2f8969f267a7f4337ec173eed590c4c7654182fc0c244bea5c',
-	'kakera/kakera_memory5.png' => 'c4ce311c607466a940ec2de383b97d62f6493d52421d2bc5f3b008f86570c3db',
-	'kakera/kakera_memory6.png' => 'e60924ec73da7740bee11f2f66ee58c5134e8bfcd8b7cdc33d90d639ba80f488',
-	'kakera/kakera_memory7.png' => '1c0061597e1d6447aa702d8fb09e825f306e3d3f93ce232e30656cc6fed1db8b',
-	'kakera/kakera_memory8.png' => '9a80e8a86273ed1e40a37723dd71479f0d7f905e563c79e8f52a2fdd332de2e3',
-	'kakera/kakera_memory9.png' => '4147b181d4898f0b22348ec023d6b699878abf738659e2de7b85ef3aec8c4b10',
-	'kakera/kakera_memory10.png' => 'c284403d94ad1a8fd917173523c7dc7fb11af96cc3641303d44c83ab042f053a',
+	'goa_memory1.png' => '69778b0f05413f73e4e4cc1d8118d7cbf11997a9c037acad43af79e1224b984c',
+	'goa_memory2.png' => 'e2fe437ce0cdd71f49a8e2704e61e280b7976ccc2de06a9c5f495287d5853781',
+	'goa_memory3.png' => 'bf806af61568aeaede05181f62495696aa6e0ae8f39950a41787429dc81039d4',
+	'goa_memory4.png' => 'b0ef62d9aa524b251b312e1def46787a6189738257a6cc35eb748c911ac02dd8',
+	'kakera/kakera_memory1.png' => '9a2317aad635170607c46e49457db4b9a01aa284691884b86d45da698e75e15d',
+	'kakera/kakera_memory2.png' => '619794223df8f9dd0af46a79012ead7dfb9deff00adbb256fadfdbef59a5f375',
+	'kakera/kakera_memory3.png' => 'b53ebe6f4ab849003af52f3ed088d048eaf6d509403c4b6a46a2871c1cd516d5',
+	'kakera/kakera_memory4.png' => '0ebb575c152cc865dcb4aac9ba8868d943a17152b884e018453138ebffd074e3',
+	'kakera/kakera_memory5.png' => 'b3d7ebeb1011b135a1702c7b365f85afd67737bf16fc9d5b6bfc6cbc78068d9f',
+	'kakera/kakera_memory6.png' => '4bcbc40494c514f28e4ff5e35ae403bd02d4b22d2955d58602996cd22127dbd5',
+	'kakera/kakera_memory7.png' => '68bbf8ab276e0323b690fcedf290c232270837b73e1b70407b4ad8c1bfc4bd6b',
+	'kakera/kakera_memory8.png' => 'ee9553ac38216fa3aae00941429e405a6593abb8d147211697f4ada332b1e53b',
+	'kakera/kakera_memory9.png' => '22de2f925b9566710a7a9365f88a4aca1329f10af4c20887b60a71b552d9a5fa',
+	'kakera/kakera_memory10.png' => '5c0e24f8026a413765d5885eab24b30f60f6fceb81988bece2bbe3631836bf1a',
 ];
 foreach ($officialMemoryHashes as $relative => $expectedHash) {
 	$path = $root . '/graphics_jp/locale_jp/' . $relative;
@@ -548,12 +550,12 @@ if ($emptyDirectories !== []) {
 }
 
 $officialGraphicHashes = [
-	'quiz/ask_auntie_eva.png' => 'db733aa3cc8f338be5d2889c7e1090fd2999ce05851b15e9a5bd8a3925f6f7eb',
-	'quiz/m1.png' => 'ed99f57d709f1c21de02bfd000b976a03cb54a65eaa8d8e21af7a623fc70f3f9',
-	'quiz/m2.png' => '74cb64db713c932c53f7049a141364cfedefb048bebfa2053ec9ff93d375e207',
-	'save/saveload_area.png' => '661b6edac50a637db8dd211b7861cd937cfef2e61fbeb5e09e233a1365624a83',
-	'save/saveload_area_5.png' => 'a5b5ee3cb48a3557b4863c85cd4125631f1b6f706a03b7aa64ec0ded0da7a1c3',
-	'quiz2/quiz2_front_2.png' => '795fd6e8391169225fb1d0aacf1e62a7a9109d0df6bd758fee90bae2c4563130',
+	'quiz/ask_auntie_eva.png' => 'ce7bbdc1254e49236eef1d5129b4317a943ca13cba7fd7431443f9d29cb58dc5',
+	'quiz/m1.png' => '55f1b7c1992ddc928a811d7eb9265b77dd24f2096ed22be58064dbfe6a4dd3b9',
+	'quiz/m2.png' => '4905f0cd195a36882f93b3fe0d92facfe01bda218b67f803414d04b8419feac7',
+	'save/saveload_area.png' => '7be3cee5c50b138b933f37fb44811e0f75481d29fd619918c582d766b07fa054',
+	'save/saveload_area_5.png' => '24f5fe51da0155f87bd6136ace9b74143ee440f48a0d2877a32228423baab2e0',
+	'quiz2/quiz2_front_2.png' => '084ec7ee4380fa73ace327f7a83e25592cc6de7ab2fbe4643a5fea943ed306ca',
 ];
 foreach ($officialGraphicHashes as $relative => $expectedHash) {
 	if (hash_file('sha256', $activeRoot . '/' . $relative) !== $expectedHash) {
@@ -562,20 +564,20 @@ foreach ($officialGraphicHashes as $relative => $expectedHash) {
 }
 
 $generatedGraphicHashes = [
-	'trophy/trophy_caption.png' => '10f46825ce02e4393c20b8e746cc53e9f6ccc8efb34016999889bc54e5c50f9d',
-	'SystemBtn/yes.png' => '4da7cc2cad14ffcad3a0b935d8560ed6f48b5a2329880dcab21ce2c7eadb90a9',
-	'SystemBtn/no.png' => '57a68b229b2f2ccae72961a606442a2b6f7cd274ed8ecba750728da691b1c88b',
-	'SystemBtn/title_bg.png' => 'eb701937cf4240077e1e641543cd0fd54fb624e97bd9e97ab65874b8b355597e',
-	'title_menu/yes.png' => '4da7cc2cad14ffcad3a0b935d8560ed6f48b5a2329880dcab21ce2c7eadb90a9',
-	'title_menu/no.png' => '57a68b229b2f2ccae72961a606442a2b6f7cd274ed8ecba750728da691b1c88b',
-	'jump/EP1.png' => 'd207ccb55a1e0c6cdf796a3306971f010cd311f7c4110c0e7e29ab93135a118b',
-	'title/chiru/title1_text_ep1_4.png' => '82012599ef402f3ceb93d29f0a36e7784777cf8cbf0ffe29a49acfad293717e6',
-	'title/title1_text_ep5_8.png' => '5f13bfe7a705cfc9f9a16b41c85358f0d50edd828afcb4261b45cd1483fb536a',
-	'title/title1_text_exit.png' => 'f42fad061a2aff475659367b0ee5969d6108bfb59946a84106bfa6e0a72a16da',
-	'title/title1_text_unlock.png' => 'afdbab43821f4bfdd523344d1a55509ccdce3c2da851f62c787531fac010356f',
-	'title/title1_text_warning.png' => '52cdab4b2f99c81b906ddf566a5571bcb166765fc172e6e100ad29c57ea7e54d',
-	'title/title1_text_web.png' => 'a9a3ebe979056de5e5c1fee89f44a8084399ed54d3298c742b3c8fc989363540',
-	'title_menu/unlock_kaku_bg.png' => '4073a12236e28ad8d9636c008a32155e8c4a60df1a926d12dbf70d7750b4af26',
+	'trophy/trophy_caption.png' => 'b0aa98d5c090e32b166a599a0bc5e016960ce9f494d6f16d37279187199d0a3c',
+	'SystemBtn/yes.png' => '8cfbbd7639ea469af9451b744aad182c7d6a697061ecdf57bd45537b986539e2',
+	'SystemBtn/no.png' => 'e7bd45ee20e8921812d2be30550460075c59f9f3eb8e5d80316ef86688669bd3',
+	'SystemBtn/title_bg.png' => '86e9074f83fc4fc8db05dabd3f3a88669b43d4fa167c3de0f8ea020ace96e70d',
+	'title_menu/yes.png' => '8cfbbd7639ea469af9451b744aad182c7d6a697061ecdf57bd45537b986539e2',
+	'title_menu/no.png' => 'e7bd45ee20e8921812d2be30550460075c59f9f3eb8e5d80316ef86688669bd3',
+	'jump/EP1.png' => 'bcd0b2a4dab26a9343d86a54d828c7a7051d1f3d4e96d30027379535e72f037e',
+	'title/chiru/title1_text_ep1_4.png' => 'fd546ebcacd408227a1125d76a04e1a859d212a212b3325d6a847c68d5af5d3d',
+	'title/title1_text_ep5_8.png' => '4f251e740ac527b3733dfa1526a3844e73736dc7a99dfc5d2b15c2db9754caca',
+	'title/title1_text_exit.png' => 'db09fae66d79290cea940776b66fcd96a09fd1e46c65896bf73ce2f6740496d9',
+	'title/title1_text_unlock.png' => 'b32392f2142e1f7d6ba9a4cad1b876284d362b1dd77574f1b4160171881266f3',
+	'title/title1_text_warning.png' => 'f8fb0d9767e9717a005867ee9b6e0ef56c33c6b2f278ebf574a83b8f81d76a9e',
+	'title/title1_text_web.png' => '77874d6d074c65349512d88337dedad9b0ac1bcd3a19495eb9074c2657f818f2',
+	'title_menu/unlock_kaku_bg.png' => '32918d662645f8cdde5817eb382ca6d84584456add7651a534eb1e4cd957936d',
 ];
 foreach ($generatedGraphicHashes as $relative => $expectedHash) {
 	if (hash_file('sha256', $activeRoot . '/' . $relative) !== $expectedHash) {
@@ -584,8 +586,8 @@ foreach ($generatedGraphicHashes as $relative => $expectedHash) {
 }
 
 $cinemaLogoHashes = [
-	'cinema_logo_jp.png' => 'a27b8dccb5bae04de7aee327a1de7fe26994e2d46dd026fdd599d14b6fe010b9',
-	'cinema_logo2_jp.png' => 'ed9536bcc172a39a2d3cc06d285e9d66c3970e69db9319cfd39e3aa434cf71be',
+	'cinema_logo_jp.png' => '647bf76e821a8775758313a1f90bde290247343f0d19a01b096ab9f5c04d982d',
+	'cinema_logo2_jp.png' => 'db017c52bf95b981feac95e69c1937ede7335028e0b58c430b587bb0733d0dd6',
 ];
 foreach ($cinemaLogoHashes as $filename => $expectedHash) {
 	if (hash_file('sha256', $root . '/graphics_jp/system/logo/' . $filename) !== $expectedHash) {
@@ -594,7 +596,7 @@ foreach ($cinemaLogoHashes as $filename => $expectedHash) {
 }
 
 $messageWindowHashes = [
-	'msgwnd_ep5_jp.png' => 'ff6a7d330059175f7aa85be5b24b67397d1a993b40de1fa3b47c70b5722475c7',
+	'msgwnd_ep5_jp.png' => '3d5f6a4a229583c25a48767ba335dc4e944a9ca83d894bfa7d643286fa0379ab',
 ];
 if (is_file($root . '/graphics_jp/system/wnd/msgwnd_jp.png')) {
 	throw new RuntimeException('Redundant Japanese Rondo message-window overlay is present');

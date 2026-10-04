@@ -4598,6 +4598,7 @@ return
 	sptwait xpos,cha_lsp
 	sptwait alpha,cha_lsp
 	lsp cha_lsp,$r_cha_tati_path,1750,0,0
+	;@websocket
 	lsp r_cha_txt_lsp,$r_txt_path,930,170
 	aspt scroll_h,r_cha_txt_lsp,728 ;scroll text
 	vsp 99,0 : vsp 98,0 : mov %r_display_arrow,0 ;disable the arrows
@@ -37561,6 +37562,7 @@ return
 	*tips_ep8_side1_4
 	~
 	
+	;@websocket
 	lsp r_tips_txt_lsp,$r_tips_txt_path,930,170
 	aspt scroll_h,r_tips_txt_lsp,728
 	vsp 99,0 : vsp 98,0 : mov %r_display_arrow,0 ;disable the arrows
@@ -39278,6 +39280,7 @@ return
 		if %r_display_tips = 2 cell tips2_lsp,1 : mov $r_tips_txt_path,ep8_9_page_6_2_t : jumpf
 	~
 
+	;@websocket
 	lsp r_tips_txt_lsp,$r_tips_txt_path,930,170
 	aspt scroll_h,r_tips_txt_lsp,728
 	vsp 99,0 : vsp 98,0 : mov %r_display_arrow,0 ;disable the arrows

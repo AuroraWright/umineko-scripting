@@ -448,17 +448,15 @@ def generate_ep1_jump() -> None:
     save_image(source, OUTPUT / "jump" / "EP1.png")
 
 
-def generate_message_windows(question_temp: Path, answer_temp: Path) -> None:
-    for archive_root, temporary, destination, reference in (
-        (QUESTION, question_temp, "msgwnd_jp.png", "msgwnd_en.png"),
-        (ANSWER, answer_temp, "msgwnd_ep5_jp.png", "msgwnd_ep5_en.png"),
-    ):
-        assets = extract(archive_root / "msgwnd.txa", temporary)
-        save_png(
-            assets["msgwnd"],
-            SYSTEM_WND / destination,
-            REFERENCE_SYSTEM_WND / reference,
-        )
+def generate_message_window(answer_temp: Path) -> None:
+    """Generate only Chiru's window; the base release already supplies Rondo's."""
+    (SYSTEM_WND / "msgwnd_jp.png").unlink(missing_ok=True)
+    assets = extract(ANSWER / "msgwnd.txa", answer_temp)
+    save_png(
+        assets["msgwnd"],
+        SYSTEM_WND / "msgwnd_ep5_jp.png",
+        REFERENCE_SYSTEM_WND / "msgwnd_ep5_en.png",
+    )
 
 
 def generate_cinema_logos() -> None:
@@ -607,7 +605,7 @@ def main() -> None:
         answer_temp = temp / "answer"
         q_title = extract(QUESTION / "title1.txa", question_temp)
         a_title = extract(ANSWER / "title1.txa", answer_temp)
-        generate_message_windows(question_temp, answer_temp)
+        generate_message_window(answer_temp)
 
         for name in (
             "start",

@@ -298,7 +298,8 @@ stralias verify_updates,"最新の更新データがすべて適用されてい�
 stralias verify_engine,"最新のゲームスクリプトとエンジンを使用してください。現在のエンジンとスクリプトには互換性がありません。"
 
 stralias verification_title,"ゲームファイルの検証"
-stralias verification_verifying,"ファイルを検証しています……{n}数分かかる場合があります。{n}"
+; The full-width space keeps the ellipsis's right overhang inside the text sprite.
+stralias verification_verifying,"ファイルを検証しています……　{n}数分かかる場合があります。{n}"
 stralias verification_legend,"凡例: "
 stralias verification_modified," 変更されたファイル"
 stralias verification_missing," 不足しているファイル"
@@ -307,7 +308,7 @@ stralias verification_bad,"ゲームファイルの検証に失敗しました�
 stralias verification_nohash,"ゲームディレクトリに game.hash がありません！{n}"
 stralias verification_unsupported,"ゲームディレクトリ内の game.hash は対応していない形式です。{n}"
 stralias verification_outdated,"ゲームディレクトリの game.hash が古くなっています！{n}"
-stralias verification_end,"右クリックで終了！"
+stralias verification_end,"右クリックで終了！{n}"
 
 stralias verification_ancient,""
 

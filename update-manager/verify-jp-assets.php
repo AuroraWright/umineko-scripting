@@ -594,9 +594,11 @@ foreach ($cinemaLogoHashes as $filename => $expectedHash) {
 }
 
 $messageWindowHashes = [
-	'msgwnd_jp.png' => '1171c86caf191b223a6e87bca197dc8a3a8e9ca3c1575773e394762254c86a57',
 	'msgwnd_ep5_jp.png' => 'ff6a7d330059175f7aa85be5b24b67397d1a993b40de1fa3b47c70b5722475c7',
 ];
+if (is_file($root . '/graphics_jp/system/wnd/msgwnd_jp.png')) {
+	throw new RuntimeException('Redundant Japanese Rondo message-window overlay is present');
+}
 foreach ($messageWindowHashes as $filename => $expectedHash) {
 	$path = $root . '/graphics_jp/system/wnd/' . $filename;
 	if (!is_file($path) || hash_file('sha256', $path) !== $expectedHash) {
@@ -604,4 +606,4 @@ foreach ($messageWindowHashes as $filename => $expectedHash) {
 	}
 }
 
-echo "Verified $assetCount Japanese asset references, 14 direct PS3 memory screens, two PS3 message windows, 297 active menu graphics, localized port controls, no empty menu directories, no soft subtitles, 75 trophies, credits, and hidden Grimoire navigation" . PHP_EOL;
+echo "Verified $assetCount Japanese asset references, 14 direct PS3 memory screens, one overlaid PS3 message window, 297 active menu graphics, localized port controls, no empty menu directories, no soft subtitles, 75 trophies, credits, and hidden Grimoire navigation" . PHP_EOL;

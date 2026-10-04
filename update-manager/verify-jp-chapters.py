@@ -32,7 +32,7 @@ with tempfile.TemporaryDirectory(prefix='ps3-chapter-check-') as temp:
     generated.mkdir(parents=True)
     builder.generate_chapter_cards()
     names = {p.name for p in generated.glob('*.png')}
-    assert len(names) == 164
+    assert len(names) == 163
     assert names == {p.name for p in active.glob('*.png')}
     for name in sorted(names):
         with Image.open(generated / name) as expected, Image.open(active / name) as actual:
@@ -41,4 +41,4 @@ with tempfile.TemporaryDirectory(prefix='ps3-chapter-check-') as temp:
             bounds = actual.getchannel('A').getbbox()
             assert bounds and 0 < bounds[0] < bounds[2] < 1920, name
             assert 0 < bounds[1] < bounds[3] < 1080, name
-print('Verified 8180 PS3 glyph entries and 164 chapter cards; no canvas clipping')
+print('Verified 8180 PS3 glyph entries and 163 chapter cards; no canvas clipping')

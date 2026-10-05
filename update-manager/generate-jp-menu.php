@@ -209,7 +209,7 @@ foreach ($expectedChapterCounts as $episode => $expectedCount) {
 	foreach ($sections as $index => $section) {
 		$alias = 'date_scenario_' . $episode . '_' . ($index === 0 ? 'op' : $index);
 		$date = '';
-		if (preg_match('/^(?:(?:1986 )?\d{1,2}\/\d{1,2}(?:（[^）]+）)?\s*(?:\d{1,2}:\d{2}|--:--)|1986 \d{1,2}\/\d{1,2})/u', $section, $dateMatch) === 1) {
+		if (preg_match('/^(?:1986 )?\d{1,2}\/\d{1,2}(?:（[^）]+）)?(?:\s*(?:\d{1,2}:\d{2}|--:--))?/u', $section, $dateMatch) === 1) {
 			$date = $dateMatch[0];
 		}
 		$aliases[$alias] = $date;

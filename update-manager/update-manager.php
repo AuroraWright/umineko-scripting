@@ -649,6 +649,19 @@ function main($argc, $argv) {
 				$footer = str_replace('graphics\\locale_en\\', 'graphics\\locale_jp\\', $footer);
 				$footer = hideJapaneseGrimoireButtons($footer);
 				$footer = stubJapaneseOmakeRoutes($footer);
+				$chapterButtons = "\tmov %tmp1,855\n\tlsp tips11_lsp,";
+				if (substr_count($footer, $chapterButtons) != 1)
+					err('Unable to locate Japanese Bern chapter-selector row');
+				$footer = str_replace($chapterButtons, "\tmov %tmp1,850\n\tlsp tips11_lsp,", $footer);
+				foreach ([
+					'lsp r_info_lsp,$ts_session,35,840' => 'lsp r_info_lsp,$ts_session,35,830',
+					'lsp 746,":s;#FFFFFF`{p:7:"+$chapter_time+"{n}"+$chapter_title+"}",35,940' =>
+						'lsp 746,":s;#FFFFFF`{p:7:"+$chapter_time+"{n}"+$chapter_title+"}",35,930',
+				] as $original => $shifted) {
+					if (substr_count($footer, $original) != 1)
+						err('Unable to locate Japanese blue text indicator');
+					$footer = str_replace($original, $shifted, $footer);
+				}
 				$japaneseEndCard = $scripting.'/graphics_jp/locale_jp/end_4a.png';
 				if (!is_file($japaneseEndCard))
 					err('Missing Japanese asset '.$japaneseEndCard);

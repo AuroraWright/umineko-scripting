@@ -511,6 +511,16 @@ def quiz2_highlight(base: Image.Image) -> Image.Image:
                     amount = max(0, min(1, (value - level * 0.5) / (level * 0.2)))
                     coverage[y * width + x] = int(amount * 255)
         mask = Image.frombytes("L", button.size, bytes(coverage))
+        # The dark silver gradient crosses the intensity threshold inside
+        # each arrow. Restore its solid interior so that transition cannot
+        # create a second contour. Mirror the left arrow for the right one;
+        # leave the existing edge coverage and glyph counters intact.
+        arrow = [(307, 971), (414, 853), (370, 963), (374, 971)]
+        if box[0] != 285:
+            arrow = [(1919 - x, y) for x, y in arrow]
+        ImageDraw.Draw(mask).polygon(
+            [(x - box[0], y - box[1]) for x, y in arrow], fill=255
+        )
         mask = mask.filter(ImageFilter.GaussianBlur(1))
         mask = mask.point(lambda value: round(max(0, min(255, (value - 63.75) * 2))))
         ring = ImageChops.subtract(round_expand(mask, 5), round_expand(mask, 2))

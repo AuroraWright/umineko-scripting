@@ -227,7 +227,7 @@ if (preg_match('/^numalias criminal_button_y,883$/m', $japaneseHeader) !== 1) {
 $sharedScript = file_get_contents($root . '/script/umi_ftr.txt');
 if ($sharedScript === false || !str_contains(
 	$sharedScript,
-	'if localisation == "jp" scrollable_cfg textmargintop,95,0 : scrollable_cfg lastmargin,95,15'
+	'if localisation == "jp" scrollable_cfg textmargintop,95,0 : scrollable_cfg lastmargin,95,16'
 )) {
 	throw new RuntimeException('Bern hint scrollable lacks the Japanese layout override');
 }
@@ -335,7 +335,7 @@ if (!str_contains($japaneseMenu, 'stralias ep8_9_rules,":s;#FFFFFF`{p:34:')) {
 $japaneseCode = file_get_contents($root . '/script/jp/code.txt');
 if ($japaneseCode === false || !str_contains(
 	$japaneseCode,
-	'preset_define 34,1,55,#FFFFFF,0,0,0,1,8,#000000,0,0,0,#000000,2,55,1590'
+	'preset_define 34,1,51,#FFFFFF,0,0,0,1,8,#000000,0,0,0,#000000,2,51,1590'
 )) {
 	throw new RuntimeException('Missing or changed PS3-sized Bern puzzle rules preset');
 }
@@ -555,7 +555,7 @@ $officialGraphicHashes = [
 	'quiz/m2.png' => '4905f0cd195a36882f93b3fe0d92facfe01bda218b67f803414d04b8419feac7',
 	'save/saveload_area.png' => '7be3cee5c50b138b933f37fb44811e0f75481d29fd619918c582d766b07fa054',
 	'save/saveload_area_5.png' => '24f5fe51da0155f87bd6136ace9b74143ee440f48a0d2877a32228423baab2e0',
-	'quiz2/quiz2_front_2.png' => '084ec7ee4380fa73ace327f7a83e25592cc6de7ab2fbe4643a5fea943ed306ca',
+	'quiz2/quiz2_front_2.png' => '166a2199ee310e0959e01d20684c5098a473335420da54f191ba2c0f45e3fddc',
 ];
 foreach ($officialGraphicHashes as $relative => $expectedHash) {
 	if (hash_file('sha256', $activeRoot . '/' . $relative) !== $expectedHash) {

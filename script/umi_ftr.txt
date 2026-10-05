@@ -39344,12 +39344,13 @@ return
   if %bern_hints_taken >= 21 tree_seta %Free1,7,"auto","text",ep8_9_hint_21
 
 	scrollable 95,7,200+1920,180,1500,730
+	if localisation == "jp" amsp 95,200+1920,170
 	scrollable_cfg elemheight,95,60
 	scrollable_cfg elemwidth,95,1500
 	scrollable_cfg textmarginwidth,95,10
 	scrollable_cfg textmargintop,95,10
 	scrollable_cfg lastmargin,95,0
-	if localisation == "jp" scrollable_cfg textmargintop,95,0 : scrollable_cfg lastmargin,95,15
+	if localisation == "jp" scrollable_cfg textmargintop,95,0 : scrollable_cfg lastmargin,95,16
 	scrollable_cfg scrollbar,95,220,255,785
 	scrollable_cfg tightfit,95,2 ;top only
 	scrollable_cfg hovertext,95,#FFFFFF,1

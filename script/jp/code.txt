@@ -5,7 +5,7 @@ return
 *redefine_text_presets
 	;Two-line save captions must fit below the slot number in the 180px box.
 	preset_define 30,2,34,#FFFFFF,0,0,0,1,5,#000000,0,0,0,#000000,1,34,1350 ;Episode/chapter names
-	preset_define 34,1,55,#FFFFFF,0,0,0,1,8,#000000,0,0,0,#000000,2,55,1590 ;PS3-sized Bern puzzle rules
+	preset_define 34,1,51,#FFFFFF,0,0,0,1,8,#000000,0,0,0,#000000,2,51,1590 ;PS3-sized Bern puzzle rules
 	preset_define 35,1,3,#FFFFFF,0,0,0,0,0,#000000,0,0,0,#000000,0,3,1590 ;Bern puzzle rule spacer
 	preset_define 36,2,50,#FFFFFF,1,0,0,1,10,#000000,0,0,0,#000000,3,50,1500 ;Bern hint rows
 return

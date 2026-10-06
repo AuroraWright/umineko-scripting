@@ -398,6 +398,12 @@ topic rows), culprit prompt/button coordinates (`160/883`), and main puzzle
 button positions currently match English and are therefore not Japanese layout
 differences.
 
+For Japanese trophy-text review, add `env[trophy_unlock]=1` to `ons.cfg` and restart
+the game. Both the Rondo and Chiru trophy galleries display all their entries
+without changing earned-trophy flags. Remove the option and restart to return
+to the normal locked/unlocked display. This Japanese-only testing option is
+implemented by `enableJapaneseTrophyPreview()` in the script builder.
+
 ## Text
 
 ### Reused official Japanese text
@@ -409,7 +415,7 @@ differences.
 | Character encyclopedia bodies | Generated aliases in `script/jp/menu.txt` | Extracted from the consolidated Japanese tables in official `snr/source/saku.snr`. Ruby markup is converted to the engine's inline format. |
 | 34 canonical Tips titles and bodies | Generated aliases in `script/jp/menu.txt` | Extracted from `saku.snr`. Furigana is removed from the list-row title and moved in parentheses to the start of its description so the port list layout remains stable. The wording and readings remain official. |
 | Chapter names, dates, and episode titles | Generated aliases in `script/jp/menu.txt` | Extracted from Rondo/Chiru `SECTION_START` and `CHAPTER` metadata. The same data supplies save-slot descriptions and generated chapter cards. Line splitting and formatting are port adaptations. |
-| Trophy gallery entries | Generated aliases in `script/jp/menu.txt` | Official Japanese PS3/PSN trophy titles, descriptions, and ranks for Rondo (`NPWR01598`) and Chiru (`NPWR02896`). The port's locked/new notification sentences are separate project UI text. |
+| Trophy gallery entries | Generated aliases in `script/jp/menu.txt` | Official Japanese PS3/PSN trophy titles, descriptions, and ranks for Rondo (`NPWR01598`) and Chiru (`NPWR02896`). Both CG Hunter descriptions omit the final sentence about a hidden door opening upon earning platinum, because the port unlocks its hidden CGs upon ordinary CG completion instead. The port's locked/new notification sentences are separate project UI text. |
 | Bernkastel puzzle story passages | Generated aliases in `script/jp/menu.txt` | Reassembled from aligned official Japanese dialogue in `story/ep8/jp/umi8_9.txt`; wording is preserved, while the terminal punctuation of the red statements is restored from the PS3 captures described below. |
 | Bernkastel puzzle rules and hints | Generated aliases in `script/jp/menu.txt` | Rule wording follows the displayed Chiru PS3 scenario; the 21 hint choices come from the Chiru SNR hint switches, with the full stops shown by the PS3 UI restored. The user-supplied `bern_puzzle_screenshot/rules_ps3.png` and `hint.png` captures are the visual references for rule sizing and hint punctuation. |
 | Bernkastel puzzle main controls | Generated aliases in `script/jp/menu.txt` | `ケーキを選んでください` comes from Chiru `cake.txa`; the main puzzle menu and culprit-confirmation labels come from Chiru `murderer.txa`. |
@@ -435,7 +441,7 @@ context, and intended English meaning for native-speaker review.
 | Port interaction hints | `script/jp/menu.txt`. Backlog voice/jump instructions, Tips scrolling, reset confirmation, line-jump warning, save/load buttons, and related Yes/No actions describe mouse, keyboard, and touch behavior absent from the PS3 UI. |
 | Port status and navigation | `script/jp/menu.txt` and `script/jp/caches.txt`. Session statistics, previous/next chapter, return to main menu, work-in-progress and restart-required notices, the startup cache message, and similar labels are project translations. |
 | Port-only title prose and confirmation prompts | Baked into the generated title panels and SystemBtn images described above. The source is the English port UI, with Japanese wording adapted to the tone of the official PS3 title prose. |
-| Trophy caption and notifications | `トロフィー`, the locked message, and the new-trophy notification are project UI translations. The individual trophy records remain official. |
+| Trophy caption and notifications | `トロフィー`, the locked message, and the new-trophy notification are project UI translations. Individual trophy records use official wording, with the CG Hunter omission documented above. |
 | Three Episode 8 placeholder Tips | `r_tips_8_1` through `r_tips_8_3` in `script/jp/menu.txt`. These port placeholders have no official PS3 Tips records and retain identifiers `81`, `82`, and `83`. |
 | General locale glue | Remaining visible Japanese in `script/jp/{header,code,credits,menu,prefs,caches}.txt` that is not explicitly identified in the official table above should be treated as project localization or port integration text. This includes messages for behaviors implemented only by the PC port. |
 

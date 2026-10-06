@@ -454,6 +454,20 @@ function restoreJapaneseFurigana($str, $manifestPath) {
 	return $str;
 }
 
+function enableJapaneseTrophyPreview($str) {
+	// Preview every gallery entry without writing earned-trophy flags.
+	$str = preg_replace_callback('/(\*trophy_page_new\b.*?)(?=\n\*trophy_update\b)/s', function ($match) {
+		$page = str_replace('tree_clear 6', 'operate_config u_read,$Free9,"trophy_unlock"'."\n\ntree_clear 6", $match[1], $readCount);
+		$page = preg_replace('/^if (%87\d{2})==0 tree_seta/m', 'if $1==0 && $Free9 != "1" tree_seta', $page, -1, $lockedCount);
+		$page = preg_replace('/^if (%87\d{2})!=0 tree_seta/m', 'if $1!=0 || $Free9 == "1" tree_seta', $page, -1, $unlockedCount);
+		if ($readCount != 1 || $lockedCount != 75 || $unlockedCount != 75)
+			err('Unable to enable Japanese trophy-gallery preview');
+		return $page;
+	}, $str, -1, $pageCount);
+	if ($pageCount != 1) err('Unable to locate Japanese trophy gallery');
+	return $str;
+}
+
 function hideJapaneseGrimoireButtons($str) {
 	// Only hide the Grimoire switch. Episode 8 Tips keeps its original
 	// destination; the Japanese menu aliases make that Grimoire page blank.
@@ -649,6 +663,7 @@ function main($argc, $argv) {
 				$footer = str_replace('graphics\\locale_en\\', 'graphics\\locale_jp\\', $footer);
 				$footer = hideJapaneseGrimoireButtons($footer);
 				$footer = stubJapaneseOmakeRoutes($footer);
+				$footer = enableJapaneseTrophyPreview($footer);
 				$chapterButtons = "\tmov %tmp1,855\n\tlsp tips11_lsp,";
 				if (substr_count($footer, $chapterButtons) != 1)
 					err('Unable to locate Japanese Bern chapter-selector row');

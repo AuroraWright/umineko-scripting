@@ -115,7 +115,7 @@ $trophies += [
 	'23' => ['ゴールド', '黄金の魔女の手番', 'Episode2を最後まで読む。'],
 	'24' => ['ゴールド', '黄金の魔女の晩餐', 'Episode3を最後まで読む。'],
 	'25' => ['ゴールド', '黄金の魔女の同盟', 'Episode4を最後まで読む。'],
-	'26' => ['ゴールド', 'CGハンター', 'Picture Boxの達成率が100%になる。隠された扉はプラチナの称号を得たときに開かれるだろう……。'],
+	'26' => ['ゴールド', 'CGハンター', 'Picture Boxの達成率が100%になる。'],
 	'27' => ['ゴールド', 'Musicハンター', 'Music Boxの達成率が100%になる。'],
 	'50' => ['プラチナ', 'Witchハンター', '全てのトロフィーを集める。'],
 	'51' => ['ブロンズ', 'お帰りなさいませ、六軒島へ。', 'Episode5を開始する。'],
@@ -150,7 +150,7 @@ $trophies += [
 	'92' => ['シルバー', '黄金の魔女の葬送曲', 'Episode7を最後まで読む。'],
 	'93' => ['シルバー', '黄金の魔女の黄昏 ～手品～', 'Episode8の手品ルートを最後まで読む'],
 	'94' => ['シルバー', '黄金の魔女の黄昏 ～魔法～', 'Episode8の魔法ルートを最後まで読む'],
-	'95' => ['ゴールド', 'CGハンター', 'Picture Boxの達成率が100%になる。 隠された扉はプラチナの称号を得たときに開かれるだろう……。'],
+	'95' => ['ゴールド', 'CGハンター', 'Picture Boxの達成率が100%になる。'],
 	'96' => ['ゴールド', 'Musicハンター', 'Music Boxの達成率が100%になる。'],
 ];
 if (count($trophies) !== 75) {
@@ -225,7 +225,7 @@ foreach ($expectedChapterCounts as $episode => $expectedCount) {
 	$aliases['save_' . $episode . '_ura'] = $episodeHeading . '????}`';
 }
 $aliases['save_1_xx'] = ':s;#FFFFFF`{p:30:' . preg_replace('/^Episode/', 'Episode ', $episodeTitles[1]) . '.{n}おまけ1}`';
-$aliases['date_scenario_episode'] = 'エピソード';
+$aliases['date_scenario_episode'] = 'Episode';
 $aliases['date_scenario_op_chapter'] = '序章';
 for ($chapter = 1; $chapter <= 25; $chapter++) {
 	$aliases['date_scenario_' . $chapter . '_chapter'] = '第' . $chapter . '章';
